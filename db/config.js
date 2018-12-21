@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var faker = require('faker');
 
 // use db if exists, else create db
 mongoose.connect('mongodb://localhost/robinshood_lineGraph');
@@ -187,8 +188,6 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
   return newStock;
 };
 
-var randomStock = createRandomStock('TEST', 'Test Company Inc', 0.52, 12550, 110.25, new Date);
-
 /*var testStock = {
   ticker: 'TEST',
   name: 'Testing Co',
@@ -202,5 +201,41 @@ var randomStock = createRandomStock('TEST', 'Test Company Inc', 0.52, 12550, 110
   }
 };*/
 
-Stock.insertMany(randomStock, err => { console.log(err); });
+
+var generateTicker = str => {
+  var ticker = '';
+  var strArray = str.split(' ');
+  for (var i = 0; i < 4; i++) {
+    ticker += strArray[i][0];
+  }
+  return ticker;
+};
+
+var createRandomStocks = (num, latestDateTime) => {
+  // Returns an array of random stock objects of size num, with the latest price data point at latestDateTime.
+
+  var array = [];
+  var tickers = new Set;
+
+  var createRandomCompany = () => {
+    var company = {};
+    company.name = faker.commerce.productName() + ' ' + faker.address.state();
+    company.ticker = generateTicker(company.name);
+    return company;
+  };
+
+  for (var i = 0; i < num; i++) {
+    var company = createRandomCompany();
+    while (tickers.has(company.ticker)) {
+      company = createRandomCompany();
+    }
+    tickers.add(company.ticker);
+    console.log(company.ticker, company.name);
+    array.push(createRandomStock(company.ticker, company.name, Math.random(), Math.random() * 500000, faker.commerce.price(), latestDateTime));
+  }
+
+  return array;
+};
+
+Stock.insertMany(createRandomStocks(100, new Date), err => { console.log(err); });
 
