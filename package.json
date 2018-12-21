@@ -10,7 +10,7 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "seed": "node db/seed.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.16.4",
