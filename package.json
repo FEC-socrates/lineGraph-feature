@@ -2,6 +2,7 @@
   "name": "",
   "version": "",
   "description": "",
+  "private": true,
   "author": "",
   "license": "",
   "engines": {
@@ -10,17 +11,26 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "seed": "node db/seed.js",
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack"
   },
   "dependencies": {
     "express": "^4.16.4",
     "faker": "^4.1.0",
     "mongoose": "^5.4.0",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.9",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
     "eslint": "^5.10.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "webpack": "^4.28.1",
+    "webpack-cli": "^3.1.2"
   }
 }
