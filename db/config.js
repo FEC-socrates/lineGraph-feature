@@ -237,5 +237,11 @@ var createRandomStocks = (num, latestDateTime) => {
   return array;
 };
 
-Stock.insertMany(createRandomStocks(100, new Date), err => { console.log(err); });
+Stock.estimatedDocumentCount({})
+  .then(dbItemCount => { 
+    console.log('Items in db.stocks: ', dbItemCount);
+    if (dbItemCount < 90) {
+      Stock.insertMany(createRandomStocks(100, new Date), err => { console.log('DB seeding errors:', err); });
+    }
+  });
 
