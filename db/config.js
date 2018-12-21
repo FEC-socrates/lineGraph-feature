@@ -16,33 +16,29 @@ var stock = new mongoose.Schema({
   name: String,
   analystBuy: Number,
   platformOwners: Number,
-  prices: [
+  last1dPrices: [
     {
-      last1d: [
-        {
-          priceType: String,
-          datetime: Date,
-          price: Number
-        }
-      ],
-      last1w: [
-        {
-          datetime: Date,
-          price: Number
-        }
-      ],
-      last1y: [
-        {
-          datetime: Date,
-          price: Number
-        }
-      ],
-      last5y: [
-        {
-          datetime: Date,
-          price: Number
-        }
-      ],
+      priceType: String,
+      datetime: Date,
+      price: Number
+    }
+  ],
+  last1wPrices: [
+    {
+      datetime: Date,
+      price: Number
+    }
+  ],
+  last1yPrices: [
+    {
+      datetime: Date,
+      price: Number
+    }
+  ],
+  last5yPrices: [
+    {
+      datetime: Date,
+      price: Number
     }
   ]
 });
@@ -52,6 +48,39 @@ var Stock = mongoose.model('Stock', stock);
 Stock.listAll = () => {
   // Returns a Promise object which resolves to a list of all stocks in the collection.
   return Stock.find({}, 'ticker name');
+};
+
+Stock.getInfo = ticker => {
+  // Returns a Promise object which resolves to basic info for the stock matching the provided ticker.
+  return Stock.findOne(
+    {ticker: ticker}, 
+    'ticker name analystBuy platformOwners');
+};
+
+Stock.get1dPrices = ticker => {
+  // Returns a Promise object which resolves to 1d price history for the stock matching the provided ticker.
+  return Stock.findOne(
+    {ticker: ticker}, 
+    {'last1dPrices': 1});
+};
+
+Stock.get1wPrices = ticker => {
+  // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
+  return Stock.findOne(
+    {ticker: ticker}, 
+    {'last1wPrices': 1});
+};
+
+Stock.get1mPrices = ticker => {
+  // Returns a Promise object which resolves to 1m price history for the stock matching the provided ticker.
+  return Stock.aggregate([
+    {
+      $match: {ticker: ticker}
+    },
+    {
+      $unwind: "$prices"
+    }
+  ]);
 };
 
 
@@ -132,34 +161,32 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     name: name,
     analystBuy: analystBuy,
     platformOwners: platformOwners,
-    prices: {
-      last1d: [Object.assign({priceType: latestPriceObjType}, latestPriceObj)],
-      last1w: [latestPriceObj],
-      last1y: [latestPriceObj],
-      last5y: [latestPriceObj],
-    }
+    last1dPrices: [Object.assign({priceType: latestPriceObjType}, latestPriceObj)],
+    last1wPrices: [latestPriceObj],
+    last1yPrices: [latestPriceObj],
+    last5yPrices: [latestPriceObj],
   };
 
   // Populate last5y prices
   for (var i = 0; i < 52 * 5 - 1; i++) {
-    var lastPrice = newStock.prices.last5y[newStock.prices.last5y.length - 1].price;
-    var newDateTime = new Date(newStock.prices.last5y[newStock.prices.last5y.length - 1].datetime);
+    var lastPrice = newStock.last5yPrices[newStock.last5yPrices.length - 1].price;
+    var newDateTime = new Date(newStock.last5yPrices[newStock.last5yPrices.length - 1].datetime);
     newDateTime.setDate(newDateTime.getDate() - 7);
-    newStock.prices.last5y.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
+    newStock.last5yPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
   }
 
   // Populate last1y prices
   for (var i = 0; i < 365 - 1; i++) {
-    var lastPrice = newStock.prices.last1y[newStock.prices.last1y.length - 1].price;
-    var newDateTime = new Date(newStock.prices.last1y[newStock.prices.last1y.length - 1].datetime);
+    var lastPrice = newStock.last1yPrices[newStock.last1yPrices.length - 1].price;
+    var newDateTime = new Date(newStock.last1yPrices[newStock.last1yPrices.length - 1].datetime);
     newDateTime.setDate(newDateTime.getDate() - 1);
-    newStock.prices.last1y.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
+    newStock.last1yPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
   }
 
   // Populate last1w prices
   for (var i = 0; i < 40 * 5 - 1 ; i++) {
-    var lastPrice = newStock.prices.last1w[newStock.prices.last1w.length - 1].price;
-    var newDateTime = new Date(newStock.prices.last1w[newStock.prices.last1w.length - 1].datetime);
+    var lastPrice = newStock.last1wPrices[newStock.last1wPrices.length - 1].price;
+    var newDateTime = new Date(newStock.last1wPrices[newStock.last1wPrices.length - 1].datetime);
     if (newDateTime.getHours() > 16) {
       newDateTime.setHours(16);
       newDateTime.setMinutes(0);
@@ -170,7 +197,7 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     } else {
       newDateTime.setMinutes(newDateTime.getMinutes() - 10);
     }
-    newStock.prices.last1w.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
+    newStock.last1wPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
   }
 
   // Populate last1d prices
@@ -179,15 +206,15 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
   dayStart.setMinutes(0);
   var dataPoints = (latestMarketDateTime - dayStart) / (5 * 60 * 1000);
   for (var i = 0; i < dataPoints ; i++) {
-    var lastPrice = newStock.prices.last1d[newStock.prices.last1d.length - 1].price;
-    var newDateTime = new Date(newStock.prices.last1d[newStock.prices.last1d.length - 1].datetime);
+    var lastPrice = newStock.last1dPrices[newStock.last1dPrices.length - 1].price;
+    var newDateTime = new Date(newStock.last1dPrices[newStock.last1dPrices.length - 1].datetime);
     if (newDateTime.getHours() > 16) {
       newDateTime.setHours(16);
       newDateTime.setMinutes(0);
     } else {
       newDateTime.setMinutes(newDateTime.getMinutes() - 5);
     }
-    newStock.prices.last1d.push(randPrice(hoursType(newDateTime), newDateTime, lastPrice, 0.02));
+    newStock.last1dPrices.push(randPrice(hoursType(newDateTime), newDateTime, lastPrice, 0.02));
 
   }
 
@@ -236,8 +263,7 @@ var createRandomStocks = (num, latestDateTime) => {
       company = createRandomCompany();
     }
     tickers.add(company.ticker);
-    console.log(company.ticker, company.name);
-    array.push(createRandomStock(company.ticker, company.name, Math.random(), Math.random() * 500000, faker.commerce.price(), latestDateTime));
+    array.push(createRandomStock(company.ticker, company.name, Math.random().toFixed(2), Math.round(Math.random() * 500000), faker.commerce.price(), latestDateTime));
   }
 
   return array;
@@ -248,7 +274,7 @@ Stock.estimatedDocumentCount({})
   .then(dbItemCount => { 
     console.log('Items in db.stocks: ', dbItemCount);
     if (dbItemCount < 90) {
-      Stock.insertMany(createRandomStocks(100, new Date), err => { console.log('DB seeding errors:', err); });
+      Stock.insertMany(createRandomStocks(100, new Date), err => { console.log('DB seeding triggered. Seeding errors:', err); });
     }
   });
 
