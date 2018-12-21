@@ -7,7 +7,10 @@
   "engines": {
     "node": ">=6.13.0"
   },
-  "scripts": {},
+  "scripts": {
+    "start": "nodemon server/index.js",
+    "seed": "node db/seed.js"
+  },
   "dependencies": {
     "express": "^4.16.4",
     "faker": "^4.1.0",
