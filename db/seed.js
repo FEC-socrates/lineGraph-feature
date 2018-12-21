@@ -6,5 +6,5 @@ var seed = require('./seed-helpers');
 Stock.estimatedDocumentCount({})
   .then(dbItemCount => { 
     console.log('Pre-seed # of stocks: ', dbItemCount);
-    Stock.insertMany(seed(100, new Date), err => { console.log('DB seeding triggered. Errors? -->', err); });
+    Stock.insertMany(seed.createRandomStocks(100, new Date), err => { console.log('DB seeding triggered. Errors? -->', err); });
   });

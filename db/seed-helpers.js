@@ -170,4 +170,11 @@ var createRandomStocks = (num, latestDateTime) => {
 };
 
 
-module.exports = createRandomStocks;
+module.exports = {
+  randPrice,
+  hoursType, 
+  createRandomStock, 
+  generateTicker,
+  createRandomCompany,
+  createRandomStocks
+};
