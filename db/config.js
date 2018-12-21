@@ -19,7 +19,7 @@ var stock = new mongoose.Schema({
     {
       last1d: [
         {
-          type: String,
+          priceType: String,
           datetime: Date,
           price: Number
         }
@@ -46,11 +46,13 @@ var stock = new mongoose.Schema({
   ]
 });
 
-var randPrice = (type, datetime, refPrice, maxChangeFactor)=> {
+var Stock = mongoose.model('Stock', stock);
+
+var randPrice = (priceType, datetime, refPrice, maxChangeFactor)=> {
   // Returns a price object with a randomly generated price based on the refPrice and maxChangeFactor.
 
   // Accepts the following arguments: 
-    // type: Optional string representing the type property for the price object. This property does not get assigned if type is undefined
+    // priceType: Optional string representing the type property for the price object. This property does not get assigned if type is undefined
     // datetime: Date that will get assigned to the price object
     // refPrice: The reference price you want to use to produce this new random price
     // maxChangeFactor: Calculates the output price based on a max swing of this multiple (e.g. if maxChangeFactor is 0.1, the output price can be 0.9x to 1.1x of the refPrice). Cannot go below zero.
@@ -60,8 +62,8 @@ var randPrice = (type, datetime, refPrice, maxChangeFactor)=> {
     datetime: datetime,
     price: price
   };
-  if (type) {
-    priceObj.type = type;
+  if (priceType) {
+    priceObj.priceType = priceType;
   }
   return priceObj;
 };
@@ -124,7 +126,7 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     analystBuy: analystBuy,
     platformOwners: platformOwners,
     prices: {
-      last1d: [Object.assign({type: latestPriceObjType}, latestPriceObj)],
+      last1d: [Object.assign({priceType: latestPriceObjType}, latestPriceObj)],
       last1w: [latestPriceObj],
       last1y: [latestPriceObj],
       last5y: [latestPriceObj],
@@ -165,7 +167,6 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
   }
 
   // Populate last1d prices
-  debugger;
   var dayStart = new Date(latestMarketDateTime);
   dayStart.setHours(9);
   dayStart.setMinutes(0);
@@ -185,3 +186,21 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
 
   return newStock;
 };
+
+var randomStock = createRandomStock('TEST', 'Test Company Inc', 0.52, 12550, 110.25, new Date);
+
+/*var testStock = {
+  ticker: 'TEST',
+  name: 'Testing Co',
+  analystBuy: 0.31,
+  platformOwners: 8888,
+  prices: {
+    last1d: [{datetime: new Date, price: 101.98918793847282, priceType: 'Normal'}],
+    last1w: [{datetime: new Date, price: 99.03624194022998}],
+    last1y: [[{datetime: new Date, price: 99.03624194022998}]],
+    last5y: [[{datetime: new Date, price: 99.03624194022998}]],
+  }
+};*/
+
+Stock.insertMany(randomStock, err => { console.log(err); });
+
