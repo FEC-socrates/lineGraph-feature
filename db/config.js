@@ -78,9 +78,29 @@ Stock.get1mPrices = ticker => {
       $match: {ticker: ticker}
     },
     {
-      $unwind: "$prices"
+      $project: {'last1yPrices': 1}
+    },
+    {
+      $unwind: '$last1yPrices'
+    },
+    {
+      $limit: 30
     }
   ]);
+};
+
+Stock.get1yPrices = ticker => {
+  // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
+  return Stock.findOne(
+    {ticker: ticker}, 
+    {'last1yPrices': 1});
+};
+
+Stock.get5yPrices = ticker => {
+  // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
+  return Stock.findOne(
+    {ticker: ticker}, 
+    {'last5yPrices': 1});
 };
 
 

@@ -40,14 +40,16 @@ app.get('/stocks/:ticker/last1mPrices', (req, res) => {
 
 // GET /stocks/:ticker/last1yPrices returns relevant price history for a stock
 app.get('/stocks/:ticker/last1yPrices', (req, res) => {
-  console.log(req.method, req.path, req.body);
-  res.send(`${req.method} received for ${req.path}. Routing is pending implementation.`);
+  console.log(req.method, req.path, req.body, req.params.ticker);
+  stocks.get1yPrices(req.params.ticker)
+    .then(results => { res.send(JSON.stringify(results)); });
 });
 
 // GET /stocks/:ticker/last5yPrices returns relevant price history for a stock
 app.get('/stocks/:ticker/last5yPrices', (req, res) => {
-  console.log(req.method, req.path, req.body);
-  res.send(`${req.method} received for ${req.path}. Routing is pending implementation.`);
+  console.log(req.method, req.path, req.body, req.params.ticker);
+  stocks.get5yPrices(req.params.ticker)
+    .then(results => { res.send(JSON.stringify(results)); });
 });
 
 app.listen(port, () => console.log('server is listening!'));
