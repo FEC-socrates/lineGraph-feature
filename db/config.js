@@ -49,6 +49,12 @@ var stock = new mongoose.Schema({
 
 var Stock = mongoose.model('Stock', stock);
 
+Stock.listAll = () => {
+  // Returns a Promise object which resolves to a list of all stocks in the collection.
+  return Stock.find({}, 'ticker name');
+};
+
+
 var randPrice = (priceType, datetime, refPrice, maxChangeFactor)=> {
   // Returns a price object with a randomly generated price based on the refPrice and maxChangeFactor.
 
@@ -237,6 +243,7 @@ var createRandomStocks = (num, latestDateTime) => {
   return array;
 };
 
+
 Stock.estimatedDocumentCount({})
   .then(dbItemCount => { 
     console.log('Items in db.stocks: ', dbItemCount);
@@ -245,3 +252,4 @@ Stock.estimatedDocumentCount({})
     }
   });
 
+module.exports = Stock;
