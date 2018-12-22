@@ -37,19 +37,26 @@ class Chart5y extends React.Component {
 
       series: [{
         name: 'test',
-        data: [
-          ['2018-12-14T20:10:14.931Z',550.1190873938314],
-          ['2018-12-14T20:20:14.931Z',612.1190873938314],
-          ['2018-12-14T21:10:14.931Z',650.1190873938314],
-          ['2018-12-14T21:20:14.931Z',632.1190873938314]
-        ],
+        data: [],
         color: '#21ce99'
       }],
 
       plotOptions: {
         series: {
           marker: {
-            enabled: false
+            enabled: false,
+            states: {
+              hover: {
+              lineColor: '#1b1b1d',
+              lineWidth: 2,
+              }
+            }
+          },
+          states: {
+            hover: {
+              lineWidthPlus: 0,
+              halo: false
+            }
           }
         }
       },
