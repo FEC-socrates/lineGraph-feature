@@ -1,5 +1,6 @@
 body {
-	background-color: #1b1b1d
+	background-color: #1b1b1d;
+  font-family: "DIN Pro", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 #graph {
