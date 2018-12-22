@@ -11,13 +11,44 @@ class Chart5y extends React.Component {
   componentDidMount() {
     console.log('foo');
     var chart = Highcharts.chart('graph', {
+
       chart: {
-        type: 'line'
+        type: 'line' ,
+        backgroundColor: '#1b1b1d'
       },
+
       series: [{
         name: 'test',
-        data: [1, 2, 3, 4, 5]
-      }]
+        data: [1, 2, 3, 4, 5],
+        color: '#21ce99'
+      }],
+
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false
+          }
+        }
+      },
+
+      title: {
+        text: undefined
+      },
+
+      credits: false,
+
+      legend: {
+        enabled: false
+      },
+
+      xAxis: {
+        visible: false,
+        crosshair: true
+      },
+
+      yAxis: {
+        visible: false
+      }
     });
   }
 
