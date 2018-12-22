@@ -13,25 +13,29 @@ var stock = new mongoose.Schema({
   platformOwners: Number,
   last1dPrices: [
     {
+      _id: false,
       priceType: String,
       datetime: Date,
       price: Number
-    }
+    },
   ],
   last1wPrices: [
     {
+      _id: false,
       datetime: Date,
       price: Number
     }
   ],
   last1yPrices: [
     {
+      _id: false,
       datetime: Date,
       price: Number
     }
   ],
   last5yPrices: [
     {
+      _id: false,
       datetime: Date,
       price: Number
     }
