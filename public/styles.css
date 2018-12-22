@@ -3,6 +3,7 @@ body {
 }
 
 #graph {
+  padding-top:30px;
 	width: 676px;
 	height: 196px;
 }

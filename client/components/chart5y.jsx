@@ -65,6 +65,26 @@ class Chart5y extends React.Component {
         text: undefined
       },
 
+      tooltip: {
+        animation: false,
+        outside: true,
+        backgroundColor: '#1b1b1d',
+        borderWidth: 0,
+        shadow: false,
+        style: {
+          color: '#8c8c8e'
+        },
+        positioner: (labelWidth, labelHeight, {plotX}) => {
+          console.log(plotX);
+          return {x: plotX - 43, y: 0};
+        },
+        formatter: function() {
+          var date = new Date(this.point.name);
+          date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year:'numeric'}).toUpperCase();
+          return date;
+        }
+      },
+
       credits: false,
 
       legend: {
@@ -73,7 +93,9 @@ class Chart5y extends React.Component {
 
       xAxis: {
         visible: false,
-        crosshair: true
+        crosshair: {
+          color: '#8c8c8e'
+        }
       },
 
       yAxis: {
