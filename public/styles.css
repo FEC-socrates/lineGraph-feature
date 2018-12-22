@@ -3,8 +3,17 @@ body {
   font-family: "DIN Pro", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+#container {
+  width: 676px;
+}
+
 #graph {
   padding-top:30px;
 	width: 676px;
 	height: 196px;
+}
+
+.odometer {
+  color: white;
+  font-size: 36px;
 }

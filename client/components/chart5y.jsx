@@ -25,6 +25,8 @@ class Chart5y extends React.Component {
   }
 
   componentDidMount() {
+    var setSelectedPrice = this.props.setSelectedPrice;
+
     this.chart = Highcharts.chart('graph', {
 
       chart: {
@@ -75,10 +77,10 @@ class Chart5y extends React.Component {
           color: '#8c8c8e'
         },
         positioner: (labelWidth, labelHeight, {plotX}) => {
-          console.log(plotX);
           return {x: plotX - 43, y: 0};
         },
         formatter: function() {
+          setSelectedPrice(this.point.y);
           var date = new Date(this.point.name);
           date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year:'numeric'}).toUpperCase();
           return date;
