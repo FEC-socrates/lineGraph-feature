@@ -26,6 +26,10 @@ class Chart5y extends React.Component {
 
   componentDidMount() {
     var setSelectedPrice = this.props.setSelectedPrice;
+    var setChangeCaption = this.props.setChangeCaption;
+    var tooltipY = this.props.tooltipY;
+    var defaultCaption = 'Past 5 Years';
+    setChangeCaption(defaultCaption);
 
     this.chart = Highcharts.chart('graph', {
 
@@ -76,11 +80,13 @@ class Chart5y extends React.Component {
         style: {
           color: '#8c8c8e'
         },
-        positioner: (labelWidth, labelHeight, {plotX}) => {
-          return {x: plotX - 43, y: 0};
+        positioner: (labelWidth, labelHeight, point) => {
+          console.log(point);
+          return {x: point.plotX - 43, y: tooltipY};
         },
         formatter: function() {
           setSelectedPrice(this.point.y);
+          setChangeCaption('');
           var date = new Date(this.point.name);
           date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year:'numeric'}).toUpperCase();
           return date;
@@ -95,6 +101,7 @@ class Chart5y extends React.Component {
 
       xAxis: {
         visible: false,
+        reversed: true,
         crosshair: {
           color: '#8c8c8e'
         }
@@ -108,7 +115,9 @@ class Chart5y extends React.Component {
 
   render() {
     return (
-      <div id='graph'>Chart Goes HereX</div>
+      <div id='container' onMouseLeave={() => {this.props.handleMouseLeaveChart(defaultCaption)}}>
+        <div id='graph'>Chart Goes HereX</div>
+      </div>
     )
   }
 };

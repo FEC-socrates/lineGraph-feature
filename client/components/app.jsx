@@ -19,13 +19,22 @@ const CompanyName = styled.h1`
   color: white;
 `;
 
-const Price = styled.h1`
-  font-size: 36px;
-  font-weight: 400;
-  letter-spacing: -0.7px;
-  line-height: 42px;
+const Change = styled.span`
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 19px;
   margin: 0;
   color: white;
+`;
+
+const ChangeCaption = styled.span`
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+  line-height: 19px;
+  margin: 0;
+  color: #8c8c8e;
 `;
 
 
@@ -40,13 +49,18 @@ class App extends React.Component {
     this.state = {
       companyName: null,
       latestPrice: null,
-      selectedPrice: null
+      selectedPrice: null,
+      refStartPrice: null,
+      changeCaption: null
     };
 
     this.requestData = this.requestData.bind(this);
     this.setCompanyName = this.setCompanyName.bind(this);
     this.setSelectedPrice = this.setSelectedPrice.bind(this);
     this.setLatestPrice = this.setLatestPrice.bind(this);
+    this.setRefStartPrice = this.setRefStartPrice.bind(this);
+    this.setChangeCaption = this.setChangeCaption.bind(this);
+    this.handleMouseLeaveChart = this.handleMouseLeaveChart.bind(this);
   }
 
   setCompanyName(name) {
@@ -61,6 +75,19 @@ class App extends React.Component {
     this.setState({latestPrice: num});
   }
 
+  setRefStartPrice(num) {
+    this.setState({refStartPrice: num});
+  }
+
+  setChangeCaption(string) {
+    this.setState({changeCaption: string});
+  }
+
+  handleMouseLeaveChart(string) {
+    this.setSelectedPrice(this.state.latestPrice);
+    this.setChangeCaption(string);
+  }
+
   requestData(path, callback) {
     // Makes a get request to the provided path for a randomly generated stock
     axios.get('/stocks/')
@@ -72,19 +99,22 @@ class App extends React.Component {
           .then(({data}) => { 
             this.setLatestPrice(data.last5yPrices[0].price);
             this.setSelectedPrice(data.last5yPrices[0].price);
+            this.setRefStartPrice(data.last5yPrices[data.last5yPrices.length-1].price);
             callback(data.last5yPrices); 
           });
       });
   }
 
   render() {
+    var tooltipY = 110;
+    var change = (this.state.selectedPrice - this.state.refStartPrice).toFixed(2);
+    var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
     return (
       <div>
         <CompanyName>{this.state.companyName}</CompanyName>
-        <Odometer value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer>
-        <div id='container' onMouseLeave={() =>{this.setSelectedPrice(this.state.latestPrice); console.log('foo');}}>
-          <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice}/>
-        </div>
+        <div><Odometer value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
+        <div><Change>{change > 0 ? '+$' : '-$'} {Math.abs(change)} {'(' + changePercent + '%) '}</Change><ChangeCaption>{this.state.changeCaption}</ChangeCaption></div>
+        <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} tooltipY={tooltipY}/>
       </div>
     );
   }
