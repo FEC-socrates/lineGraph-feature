@@ -13,7 +13,7 @@ var randPrice = (priceType, datetime, refPrice, maxChangeFactor)=> {
   var price = Math.max(refPrice * (1 + maxChangeFactor * (Math.random() - 0.5) / 0.5), 0);
   var priceObj = {
     datetime: datetime,
-    price: price
+    price: price.toFixed(2)
   };
   if (priceType) {
     priceObj.priceType = priceType;
@@ -163,7 +163,7 @@ var createRandomStocks = (num, latestDateTime) => {
       company = createRandomCompany();
     }
     tickers.add(company.ticker);
-    array.push(createRandomStock(company.ticker, company.name, Math.random().toFixed(2), Math.round(Math.random() * 500000), faker.commerce.price(), latestDateTime));
+    array.push(createRandomStock(company.ticker, company.name, Math.random().toFixed(2), Math.round(Math.random() * 500000), (Math.random() * 2000).toFixed(2), latestDateTime));
   }
 
   return array;
