@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Chart5y from './chart5y.jsx';
 import axios from 'axios';
@@ -99,7 +98,7 @@ class App extends React.Component {
           .then(({data}) => { 
             this.setLatestPrice(data.last5yPrices[0].price);
             this.setSelectedPrice(data.last5yPrices[0].price);
-            this.setRefStartPrice(data.last5yPrices[data.last5yPrices.length-1].price);
+            this.setRefStartPrice(data.last5yPrices[data.last5yPrices.length - 1].price);
             callback(data.last5yPrices); 
           });
       });
@@ -110,7 +109,7 @@ class App extends React.Component {
     var change = (this.state.selectedPrice - this.state.refStartPrice).toFixed(2);
     var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
     return (
-      <div>
+      <div id='test'>
         <CompanyName>{this.state.companyName}</CompanyName>
         <div><Odometer value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
         <div><Change>{change > 0 ? '+$' : '-$'} {Math.abs(change)} {'(' + changePercent + '%) '}</Change><ChangeCaption>{this.state.changeCaption}</ChangeCaption></div>
@@ -120,4 +119,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'));
+export default App;
