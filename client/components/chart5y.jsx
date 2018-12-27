@@ -30,6 +30,7 @@ class Chart5y extends React.Component {
     var tooltipY = this.props.tooltipY;
     var defaultCaption = 'Past 5 Years';
     setChangeCaption(defaultCaption);
+    console.log('defaultCaption', defaultCaption);
 
     this.chart = Highcharts.chart('graph', {
 
