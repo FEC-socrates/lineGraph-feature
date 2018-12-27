@@ -27,10 +27,11 @@ class Chart5y extends React.Component {
   componentDidMount() {
     var setSelectedPrice = this.props.setSelectedPrice;
     var setChangeCaption = this.props.setChangeCaption;
+    var setDefaultChangeCaption = this.props.setDefaultChangeCaption;
     var tooltipY = this.props.tooltipY;
     var defaultCaption = 'Past 5 Years';
+    setDefaultChangeCaption(defaultCaption);
     setChangeCaption(defaultCaption);
-    console.log('defaultCaption', defaultCaption);
 
     this.chart = Highcharts.chart('graph', {
 
@@ -116,7 +117,7 @@ class Chart5y extends React.Component {
 
   render() {
     return (
-      <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(defaultCaption); }}>
+      <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(); }}>
         <div id='graph'>Chart Goes HereX</div>
       </div>
     );

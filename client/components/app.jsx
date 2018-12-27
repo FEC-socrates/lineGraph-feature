@@ -50,7 +50,8 @@ class App extends React.Component {
       latestPrice: null,
       selectedPrice: null,
       refStartPrice: null,
-      changeCaption: null
+      changeCaption: null,
+      defaultChangeCaption: null
     };
 
     this.requestData = this.requestData.bind(this);
@@ -59,6 +60,7 @@ class App extends React.Component {
     this.setLatestPrice = this.setLatestPrice.bind(this);
     this.setRefStartPrice = this.setRefStartPrice.bind(this);
     this.setChangeCaption = this.setChangeCaption.bind(this);
+    this.setDefaultChangeCaption = this.setDefaultChangeCaption.bind(this);
     this.handleMouseLeaveChart = this.handleMouseLeaveChart.bind(this);
   }
 
@@ -82,9 +84,13 @@ class App extends React.Component {
     this.setState({changeCaption: string});
   }
 
-  handleMouseLeaveChart(string) {
+  setDefaultChangeCaption(string) {
+    this.setState({defaultChangeCaption: string});
+  }
+
+  handleMouseLeaveChart() {
     this.setSelectedPrice(this.state.latestPrice);
-    this.setChangeCaption(string);
+    this.setChangeCaption(this.state.defaultChangeCaption);
   }
 
   requestData(path, callback) {
@@ -113,7 +119,7 @@ class App extends React.Component {
         <CompanyName>{this.state.companyName}</CompanyName>
         <div><Odometer value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
         <div><Change>{change > 0 ? '+$' : '-$'} {Math.abs(change)} {'(' + changePercent + '%) '}</Change><ChangeCaption>{this.state.changeCaption}</ChangeCaption></div>
-        <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} tooltipY={tooltipY}/>
+        <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
       </div>
     );
   }
