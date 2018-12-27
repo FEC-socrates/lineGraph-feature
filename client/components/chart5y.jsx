@@ -10,11 +10,10 @@ class Chart5y extends React.Component {
     this.chart = null;
   }
 
-  request5yData() {
+  request5yData(chart) {
     this.props.requestData('last5yPrices', json => {
 
       console.log(json);
-      console.log(this.chart.series);
 
       var data = json.map(item => {
         return [item.datetime, item.price];
@@ -39,7 +38,7 @@ class Chart5y extends React.Component {
         type: 'line',
         backgroundColor: '#1b1b1d',
         events: {
-          load: this.request5yData
+          // load: () => {this.request5yData(this);}
         }
       },
 

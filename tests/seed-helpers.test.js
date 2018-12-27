@@ -1,4 +1,4 @@
-const seedHelpers = require('../seed-helpers')
+const seedHelpers = require('../db/seed-helpers')
 
 
 describe('randPrice', () => {
