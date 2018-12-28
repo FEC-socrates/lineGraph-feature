@@ -38,7 +38,7 @@ class Chart5y extends React.Component {
         type: 'line',
         backgroundColor: '#1b1b1d',
         events: {
-          // load: () => {this.request5yData(this);}
+          load: this.request5yData
         }
       },
 

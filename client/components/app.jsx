@@ -116,9 +116,9 @@ class App extends React.Component {
     var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
     return (
       <div>
-        <CompanyName>{this.state.companyName}</CompanyName>
-        <div><Odometer value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
-        <div><Change>{change > 0 ? '+$' : '-$'} {Math.abs(change)} {'(' + changePercent + '%) '}</Change><ChangeCaption>{this.state.changeCaption}</ChangeCaption></div>
+        <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
+        <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
+        <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
         <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
       </div>
     );
