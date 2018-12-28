@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Chart5y from './chart5y.jsx';
 import axios from 'axios';
@@ -51,7 +50,8 @@ class App extends React.Component {
       latestPrice: null,
       selectedPrice: null,
       refStartPrice: null,
-      changeCaption: null
+      changeCaption: null,
+      defaultChangeCaption: null
     };
 
     this.requestData = this.requestData.bind(this);
@@ -60,6 +60,7 @@ class App extends React.Component {
     this.setLatestPrice = this.setLatestPrice.bind(this);
     this.setRefStartPrice = this.setRefStartPrice.bind(this);
     this.setChangeCaption = this.setChangeCaption.bind(this);
+    this.setDefaultChangeCaption = this.setDefaultChangeCaption.bind(this);
     this.handleMouseLeaveChart = this.handleMouseLeaveChart.bind(this);
   }
 
@@ -83,9 +84,13 @@ class App extends React.Component {
     this.setState({changeCaption: string});
   }
 
-  handleMouseLeaveChart(string) {
+  setDefaultChangeCaption(string) {
+    this.setState({defaultChangeCaption: string});
+  }
+
+  handleMouseLeaveChart() {
     this.setSelectedPrice(this.state.latestPrice);
-    this.setChangeCaption(string);
+    this.setChangeCaption(this.state.defaultChangeCaption);
   }
 
   requestData(path, callback) {
@@ -99,7 +104,7 @@ class App extends React.Component {
           .then(({data}) => { 
             this.setLatestPrice(data.last5yPrices[0].price);
             this.setSelectedPrice(data.last5yPrices[0].price);
-            this.setRefStartPrice(data.last5yPrices[data.last5yPrices.length-1].price);
+            this.setRefStartPrice(data.last5yPrices[data.last5yPrices.length - 1].price);
             callback(data.last5yPrices); 
           });
       });
@@ -111,13 +116,13 @@ class App extends React.Component {
     var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
     return (
       <div>
-        <CompanyName>{this.state.companyName}</CompanyName>
-        <div><Odometer value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
-        <div><Change>{change > 0 ? '+$' : '-$'} {Math.abs(change)} {'(' + changePercent + '%) '}</Change><ChangeCaption>{this.state.changeCaption}</ChangeCaption></div>
-        <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} tooltipY={tooltipY}/>
+        <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
+        <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
+        <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
+        <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
       </div>
     );
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'));
+export default App;

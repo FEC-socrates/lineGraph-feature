@@ -1,4 +1,4 @@
-const seedHelpers = require('../seed-helpers')
+const seedHelpers = require('../db/seed-helpers')
 
 
 describe('randPrice', () => {
@@ -131,7 +131,7 @@ describe('createRandomStocks', () => {
   });
 
   test('No stock tickers should be repeated', () => {
-    tickers = new Set;
+    var tickers = new Set;
     stocks.forEach( stock => {tickers.add(stock.ticker)} );
     expect(tickers.size).toEqual(20);
   });

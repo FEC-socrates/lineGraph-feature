@@ -10,11 +10,10 @@ class Chart5y extends React.Component {
     this.chart = null;
   }
 
-  request5yData() {
+  request5yData(chart) {
     this.props.requestData('last5yPrices', json => {
 
-      console.log(data);
-      console.log(this.chart.series);
+      console.log(json);
 
       var data = json.map(item => {
         return [item.datetime, item.price];
@@ -27,14 +26,16 @@ class Chart5y extends React.Component {
   componentDidMount() {
     var setSelectedPrice = this.props.setSelectedPrice;
     var setChangeCaption = this.props.setChangeCaption;
+    var setDefaultChangeCaption = this.props.setDefaultChangeCaption;
     var tooltipY = this.props.tooltipY;
     var defaultCaption = 'Past 5 Years';
+    setDefaultChangeCaption(defaultCaption);
     setChangeCaption(defaultCaption);
 
     this.chart = Highcharts.chart('graph', {
 
       chart: {
-        type: 'line' ,
+        type: 'line',
         backgroundColor: '#1b1b1d',
         events: {
           load: this.request5yData
@@ -53,8 +54,8 @@ class Chart5y extends React.Component {
             enabled: false,
             states: {
               hover: {
-              lineColor: '#1b1b1d',
-              lineWidth: 2,
+                lineColor: '#1b1b1d',
+                lineWidth: 2
               }
             }
           },
@@ -88,7 +89,7 @@ class Chart5y extends React.Component {
           setSelectedPrice(this.point.y);
           setChangeCaption('');
           var date = new Date(this.point.name);
-          date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year:'numeric'}).toUpperCase();
+          date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
           return date;
         }
       },
@@ -115,11 +116,11 @@ class Chart5y extends React.Component {
 
   render() {
     return (
-      <div id='container' onMouseLeave={() => {this.props.handleMouseLeaveChart(defaultCaption)}}>
+      <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(); }}>
         <div id='graph'>Chart Goes HereX</div>
       </div>
-    )
+    );
   }
-};
+}
 
 export default Chart5y;

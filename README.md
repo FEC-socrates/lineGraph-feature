@@ -11,7 +11,7 @@
 
 ## Table of Contents
 
-1. [Usage](#Usage)
+1. [Usage](#Usage) - after installing make sure you seed the db.
 1. [Requirements](#requirements)
 1. [Development](#development)
 
