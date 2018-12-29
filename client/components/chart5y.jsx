@@ -38,7 +38,7 @@ class Chart5y extends React.Component {
       console.log(json);
 
       var data = json.map(item => {
-        return [item.datetime, item.price];
+        return [item[path].datetime, item[path].price];
       });
 
       this.chart.series[0].setData(data);
