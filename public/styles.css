@@ -18,6 +18,11 @@ body {
   font-size: 36px;
 }
 
+.highcharts-series .highcharts-graph.unfocused {
+  stroke:#182b27;
+  stroke-width: 2;
+} 
+
 .highcharts-series .highcharts-graph {
   stroke:#21ce99;
   stroke-width: 2;

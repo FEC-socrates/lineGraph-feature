@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Highcharts from 'highcharts';
-import jquery from 'jquery';
+import $ from 'jquery';
 
 class Chart5y extends React.Component {
   constructor(props) {
@@ -79,9 +79,31 @@ class Chart5y extends React.Component {
     });
   }
 
+  illuminateAllSeries(boolean) {
+    var allSeries = document.getElementsByClassName('highcharts-series');
+    for (var i = 0; i < allSeries.length; i++) {
+      var element = allSeries[i].getElementsByClassName('highcharts-graph')[0];
+      if (element) {
+        if (boolean) {
+          element.classList.remove('unfocused');
+        } else {
+          element.classList.add('unfocused');
+        }
+      };
+    };
+  }
+
+  illuminteOneLine(index) {
+    var allSeries = document.getElementsByClassName('highcharts-series');
+    var selectedSeries = allSeries[index].getElementsByClassName('highcharts-graph')[0];
+    selectedSeries.classList.remove('unfocused');
+  }
+
   componentDidMount() {
     var setChangeCaption = this.props.setChangeCaption;
     var setSelectedPrice = this.props.setSelectedPrice;
+    //var illuminateAllSeries = this.illuminateAllSeries;
+    //var illuminteOneLine = this.illuminteOneLine;
     var tooltipY = this.props.tooltipY;
 
     this.chart = Highcharts.chart('graph', {
@@ -106,6 +128,12 @@ class Chart5y extends React.Component {
       plotOptions: {
         series: {
           animation: false,
+          events: {
+            mouseOver: (e) => {
+              this.illuminateAllSeries(false);
+              this.illuminteOneLine(e.target.index);
+            }
+          },
           marker: {
             enabled: false,
             symbol: 'circle',
@@ -140,13 +168,11 @@ class Chart5y extends React.Component {
           color: '#8c8c8e'
         },
         positioner: (labelWidth, labelHeight, point) => {
-          console.log(point);
           return {x: point.plotX - 43, y: tooltipY};
         },
         formatter: function() {
           setSelectedPrice(this.point.y);
           setChangeCaption('');
-          console.log(this.point);
           var date = new Date(this.point.name);
           date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
           return date;
@@ -174,7 +200,7 @@ class Chart5y extends React.Component {
 
   render() {
     return (
-      <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(); }}>
+      <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(); this.illuminateAllSeries(true);}}>
         <div id='graph'>Chart Goes HereX</div>
       </div>
     );
