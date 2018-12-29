@@ -17,3 +17,8 @@ body {
   color: white;
   font-size: 36px;
 }
+
+.highcharts-series .highcharts-graph {
+  stroke:#21ce99;
+  stroke-width: 2;
+} 

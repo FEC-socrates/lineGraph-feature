@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Highcharts from 'highcharts';
+import jquery from 'jquery';
 
 class Chart5y extends React.Component {
   constructor(props) {
@@ -65,13 +66,14 @@ class Chart5y extends React.Component {
           series[index][i] = data[i];
         }
         // Loop thru each series and load it into the chart
+        console.log(series);
         for (var i = 0; i < series.length; i++) {
           this.chart.series[i].setData(series[i]);
         }
 
       } else {
         // For 1M, 3M, 1Y and 5Y graphs: Dataset lives in one series
-        this.chart.series[0].setData(data);
+        this.chart.series[5].setData(data);
       }
 
     });
@@ -93,11 +95,12 @@ class Chart5y extends React.Component {
       },
 
       series: [
-        { data: [], color: '#21ce99' },
-        { data: [], color: '#21ce99' },
-        { data: [], color: '#21ce99' },
-        { data: [], color: '#21ce99' },
-        { data: [], color: '#21ce99' }
+        { name: 'cat1', data: [] },
+        { name: 'cat2', data: [] },
+        { name: 'cat3', data: [] },
+        { name: 'cat4', data: [] },
+        { name: 'cat5', data: [] },
+        { name: 'uncategorized', data: [] }
     ],
 
       plotOptions: {
@@ -108,6 +111,7 @@ class Chart5y extends React.Component {
             symbol: 'circle',
             states: {
               hover: {
+                fillColor: '#21ce99',
                 lineColor: '#1b1b1d',
                 lineWidth: 2
               }
