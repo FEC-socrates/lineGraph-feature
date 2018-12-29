@@ -36,6 +36,21 @@ const ChangeCaption = styled.span`
   color: #8c8c8e;
 `;
 
+const Options = styled.div`
+  display: flex;
+`;
+
+const Option = styled.div`
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 19px;
+  margin: 0;
+  color: white;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 12px;
+  margin: 0 12px
+`;
 
 // ============================================
 // REACT
@@ -120,6 +135,14 @@ class App extends React.Component {
         <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
         <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
         <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
+        <Options>
+          <Option>1D</Option>
+          <Option>1W</Option>
+          <Option>1M</Option>
+          <Option>3M</Option>
+          <Option>1Y</Option>
+          <Option>5Y</Option>
+        </Options>
       </div>
     );
   }
