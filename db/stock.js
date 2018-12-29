@@ -82,10 +82,10 @@ Stock.get1mPrices = ticker => {
       $match: {ticker: ticker}
     },
     {
-      $project: {'last1yPrices': 1}
+      $project: {'last1mPrices': '$last1yPrices', _id: 0} // change name of the field
     },
     {
-      $unwind: '$last1yPrices'
+      $unwind: '$last1mPrices'
     },
     {
       $limit: 30
@@ -100,10 +100,10 @@ Stock.get3mPrices = ticker => {
       $match: {ticker: ticker}
     },
     {
-      $project: {'last1yPrices': 1}
+      $project: {'last3mPrices': '$last1yPrices', _id: 0} // change name of the field
     },
     {
-      $unwind: '$last1yPrices'
+      $unwind: '$last3mPrices'
     },
     {
       $limit: 90
