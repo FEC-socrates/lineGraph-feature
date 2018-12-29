@@ -130,9 +130,9 @@ class App extends React.Component {
         axios.get(`/stocks/${ticker}/${path}`)
           .then(({data}) => { 
             console.log(data);
-            this.setLatestPrice(data[0][path].price);
-            this.setSelectedPrice(data[0][path].price);
-            this.setRefStartPrice(data[data.length - 1][path].price);
+            this.setLatestPrice(data[data.length - 1][path].price);
+            this.setSelectedPrice(data[data.length - 1][path].price);
+            this.setRefStartPrice(data[0][path].price);
             callback(data); 
           });
       });
