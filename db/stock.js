@@ -66,7 +66,10 @@ Stock.get1dPrices = ticker => {
   return Stock.aggregate([
     { $match: {ticker: ticker} },
     { $project: {'last1dPrices': 1, _id: 0} },
-    { $unwind: '$last1dPrices' }
+    { $unwind: '$last1dPrices' },
+    { $sort: {
+      'last1dPrices.datetime': 1
+    } }
   ]);
 };
 
@@ -75,7 +78,10 @@ Stock.get1wPrices = ticker => {
   return Stock.aggregate([
     { $match: {ticker: ticker} },
     { $project: {'last1wPrices': 1, _id: 0} },
-    { $unwind: '$last1wPrices' }
+    { $unwind: '$last1wPrices' },
+    { $sort: {
+      'last1wPrices.datetime': 1
+    } }
   ]);
 };
 
@@ -85,7 +91,10 @@ Stock.get1mPrices = ticker => {
     { $match: {ticker: ticker} },
     { $project: {'last1mPrices': '$last1yPrices', _id: 0 } },
     { $unwind: '$last1mPrices' },
-    { $limit: 30 }
+    { $limit: 30 },
+    { $sort: {
+      'last1mPrices.datetime': 1
+    } }
   ]);
 };
 
@@ -95,7 +104,10 @@ Stock.get3mPrices = ticker => {
     { $match: {ticker: ticker} },
     { $project: {'last3mPrices': '$last1yPrices', _id: 0 } },
     { $unwind: '$last3mPrices' },
-    { $limit: 90 }
+    { $limit: 90 },
+    { $sort: {
+      'last3mPrices.datetime': 1
+    } }
   ]);
 };
 
@@ -104,7 +116,10 @@ Stock.get1yPrices = ticker => {
   return Stock.aggregate([
     { $match: {ticker: ticker} },
     { $project: {'last1yPrices': 1, _id: 0} },
-    { $unwind: '$last1yPrices' }
+    { $unwind: '$last1yPrices' },
+    { $sort: {
+      'last1yPrices.datetime': 1
+    } }
   ]);
 };
 
@@ -113,7 +128,10 @@ Stock.get5yPrices = ticker => {
   return Stock.aggregate([
     { $match: {ticker: ticker} },
     { $project: {'last5yPrices': 1, _id: 0} },
-    { $unwind: '$last5yPrices' }
+    { $unwind: '$last5yPrices' },
+    { $sort: {
+      'last5yPrices.datetime': 1
+    } }
   ]);
 };
 
