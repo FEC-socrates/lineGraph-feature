@@ -40,13 +40,24 @@ class Chart5y extends React.Component {
   loadData(chart) {
     this.props.requestData(this.apiEndpoint, json => {
       var data = json.map(item => {
-        return [item[this.apiEndpoint].datetime, item[this.apiEndpoint].price];
+        if (item[this.apiEndpoint].priceType) {
+          return [item[this.apiEndpoint].datetime, item[this.apiEndpoint].price, item[this.apiEndpoint].priceType];
+        } else {
+          return [item[this.apiEndpoint].datetime, item[this.apiEndpoint].price];
+        }
       });
 
-      // For 1W graph: Dataset lives in five series (split by date)
-      if (this.props.selectedGraph === '1W') {
-        // Build an array with 5 nested arrays (each representing a series, but as long as the entire dataset)
-        var series = [[],[],[],[],[]];
+      if (this.props.selectedGraph === '1W' || this.props.selectedGraph === '1D') {
+        // For 1W graph: Dataset lives in five series (split by date)
+        if (this.props.selectedGraph === '1W') {
+          // Build an array with 5 nested arrays (each representing a series, but as long as the entire dataset)
+          var series = [[],[],[],[],[]];
+        // Else, for 1D graph: Dataset lives in three series (split by priceType)
+        } else {
+          // Build an array with 3 nested arrays (each representing a series, but as long as the entire dataset)
+          var series = [[],[],[]];
+        }
+
         series.forEach(array => {
           data.forEach(() => {
             array.push([]);
@@ -56,8 +67,8 @@ class Chart5y extends React.Component {
         var index = 0;
         // Loop through the entire data set
         for (var i = 1; i < data.length - 1; i++) {
-          // If data point is a new day
-          if ((new Date(data[i-1][0])).getDate() !== (new Date(data[i][0])).getDate()) {
+          // If data point is a new day or a new priceType
+          if ((new Date(data[i-1][0])).getDate() !== (new Date(data[i][0])).getDate() || data[i-1][2] !== data[i][2]) {
             // It should represent a new series
             series[index][i] = data[i];
             index++;
