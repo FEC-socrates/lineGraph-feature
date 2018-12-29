@@ -186,6 +186,8 @@ class Chart5y extends React.Component {
           var date = new Date(this.point.name);
           if (selectedGraph === '1W') {
             date = (date.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}) + ', ' + date.toLocaleDateString('en-us', {month: 'short', day:'numeric'}) + ' ET').toUpperCase();
+          } else if (selectedGraph === '1D') {
+            date = date.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}) + ' ET';
           } else {
             date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
           }
