@@ -63,81 +63,57 @@ Stock.getInfo = ticker => {
 
 Stock.get1dPrices = ticker => {
   // Returns a Promise object which resolves to 1d price history for the stock matching the provided ticker.
-  return Stock.findOne(
-    {ticker: ticker}, 
-    {'last1dPrices': 1});
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last1dPrices': 1, _id: 0} },
+    { $unwind: '$last1dPrices' }
+  ]);
 };
 
 Stock.get1wPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
-  return Stock.findOne(
-    {ticker: ticker}, 
-    {'last1wPrices': 1});
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last1wPrices': 1, _id: 0} },
+    { $unwind: '$last1wPrices' }
+  ]);
 };
 
 Stock.get1mPrices = ticker => {
   // Returns a Promise object which resolves to 1m price history for the stock matching the provided ticker.
   return Stock.aggregate([
-    {
-      $match: {ticker: ticker}
-    },
-    {
-      $project: {'last1mPrices': '$last1yPrices', _id: 0} // change name of the field
-    },
-    {
-      $unwind: '$last1mPrices'
-    },
-    {
-      $limit: 30
-    }
+    { $match: {ticker: ticker} },
+    { $project: {'last1mPrices': '$last1yPrices', _id: 0 } },
+    { $unwind: '$last1mPrices' },
+    { $limit: 30 }
   ]);
 };
 
 Stock.get3mPrices = ticker => {
   // Returns a Promise object which resolves to 1m price history for the stock matching the provided ticker.
   return Stock.aggregate([
-    {
-      $match: {ticker: ticker}
-    },
-    {
-      $project: {'last3mPrices': '$last1yPrices', _id: 0} // change name of the field
-    },
-    {
-      $unwind: '$last3mPrices'
-    },
-    {
-      $limit: 90
-    }
+    { $match: {ticker: ticker} },
+    { $project: {'last3mPrices': '$last1yPrices', _id: 0 } },
+    { $unwind: '$last3mPrices' },
+    { $limit: 90 }
   ]);
 };
 
 Stock.get1yPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
   return Stock.aggregate([
-    {
-      $match: {ticker: ticker}
-    },
-    {
-      $project: {'last1yPrices': 1, _id: 0}
-    },
-    {
-      $unwind: '$last1yPrices'
-    }
+    { $match: {ticker: ticker} },
+    { $project: {'last1yPrices': 1, _id: 0} },
+    { $unwind: '$last1yPrices' }
   ]);
 };
 
 Stock.get5yPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
   return Stock.aggregate([
-    {
-      $match: {ticker: ticker}
-    },
-    {
-      $project: {'last5yPrices': 1, _id: 0}
-    },
-    {
-      $unwind: '$last5yPrices'
-    }
+    { $match: {ticker: ticker} },
+    { $project: {'last5yPrices': 1, _id: 0} },
+    { $unwind: '$last5yPrices' }
   ]);
 };
 

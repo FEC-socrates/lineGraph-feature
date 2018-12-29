@@ -28,6 +28,12 @@ class Chart5y extends React.Component {
     } else if (this.props.selectedGraph === '1M') {
       path = 'last1mPrices';
       defaultCaption = 'Past Month'
+    } else if (this.props.selectedGraph === '1W') {
+      path = 'last1wPrices';
+      defaultCaption = 'Past Week'
+    } else if (this.props.selectedGraph === '1D') {
+      path = 'last1dPrices';
+      defaultCaption = 'Today'
     }
 
     setDefaultChangeCaption(defaultCaption);
