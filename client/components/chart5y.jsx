@@ -102,8 +102,7 @@ class Chart5y extends React.Component {
   componentDidMount() {
     var setChangeCaption = this.props.setChangeCaption;
     var setSelectedPrice = this.props.setSelectedPrice;
-    //var illuminateAllSeries = this.illuminateAllSeries;
-    //var illuminteOneLine = this.illuminteOneLine;
+    var selectedGraph = this.props.selectedGraph;
     var tooltipY = this.props.tooltipY;
 
     this.chart = Highcharts.chart('graph', {
@@ -174,7 +173,11 @@ class Chart5y extends React.Component {
           setSelectedPrice(this.point.y);
           setChangeCaption('');
           var date = new Date(this.point.name);
-          date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
+          if (selectedGraph === '1W') {
+            date = (date.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}) + ', ' + date.toLocaleDateString('en-us', {month: 'short', day:'numeric'}) + ' ET').toUpperCase();
+          } else {
+            date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
+          }
           return date;
         }
       },
