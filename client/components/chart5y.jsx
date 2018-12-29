@@ -44,7 +44,7 @@ class Chart5y extends React.Component {
       console.log(json);
 
       var data = json.map(item => {
-        return [item[path].datetime, item[path].price];
+        return [Date.parse(item[path].datetime), item[path].price];
       });
 
       this.chart.series[0].setData(data);
@@ -113,7 +113,8 @@ class Chart5y extends React.Component {
         formatter: function() {
           setSelectedPrice(this.point.y);
           setChangeCaption('');
-          var date = new Date(this.point.name);
+          console.log(this.point);
+          var date = new Date(this.point.options.x);
           date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
           return date;
         }
@@ -126,6 +127,7 @@ class Chart5y extends React.Component {
       },
 
       xAxis: {
+        type: 'datetime',
         visible: false,
         reversed: true,
         crosshair: {
