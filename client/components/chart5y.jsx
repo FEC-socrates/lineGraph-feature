@@ -7,44 +7,42 @@ class Chart5y extends React.Component {
   constructor(props) {
     super(props);
     this.loadData = this.loadData.bind(this);
+
     this.chart = null;
+    this.apiEndpoint = null;
+    this.defaultCaption = null;
+
+    if (this.props.selectedGraph === '5Y') {
+      this.apiEndpoint = 'last5yPrices';
+      this.defaultCaption = 'Past 5 Years';
+    } else if (this.props.selectedGraph === '1Y') {
+      this.apiEndpoint = 'last1yPrices';
+      this.defaultCaption = 'Past Year';
+    } else if (this.props.selectedGraph === '3M') {
+      this.apiEndpoint = 'last3mPrices';
+      this.defaultCaption = 'Past 3 Months';
+    } else if (this.props.selectedGraph === '1M') {
+      this.apiEndpoint = 'last1mPrices';
+      this.defaultCaption = 'Past Month';
+    } else if (this.props.selectedGraph === '1W') {
+      this.apiEndpoint = 'last1wPrices';
+      this.defaultCaption = 'Past Week';
+    } else if (this.props.selectedGraph === '1D') {
+      this.apiEndpoint = 'last1dPrices';
+      this.defaultCaption = 'Today';
+    }
+
+    this.props.setDefaultChangeCaption(this.defaultCaption);
+    this.props.setChangeCaption(this.defaultCaption);
   }
 
   loadData(chart) {
-    var setChangeCaption = this.props.setChangeCaption;
-    var setDefaultChangeCaption = this.props.setDefaultChangeCaption;
-    var path = '';
-    var defaultCaption;
-
-    if (this.props.selectedGraph === '5Y') {
-      path = 'last5yPrices';
-      defaultCaption = 'Past 5 Years';
-    } else if (this.props.selectedGraph === '1Y') {
-      path = 'last1yPrices';
-      defaultCaption = 'Past Year';
-    } else if (this.props.selectedGraph === '3M') {
-      path = 'last3mPrices';
-      defaultCaption = 'Past 3 Months';
-    } else if (this.props.selectedGraph === '1M') {
-      path = 'last1mPrices';
-      defaultCaption = 'Past Month';
-    } else if (this.props.selectedGraph === '1W') {
-      path = 'last1wPrices';
-      defaultCaption = 'Past Week';
-    } else if (this.props.selectedGraph === '1D') {
-      path = 'last1dPrices';
-      defaultCaption = 'Today';
-    }
-
-    setDefaultChangeCaption(defaultCaption);
-    setChangeCaption(defaultCaption);
-
-    this.props.requestData(path, json => {
+    this.props.requestData(this.apiEndpoint, json => {
 
       console.log(json);
 
       var data = json.map(item => {
-        return [item[path].datetime, item[path].price];
+        return [item[this.apiEndpoint].datetime, item[this.apiEndpoint].price];
       });
 
       this.chart.series[0].setData(data);
@@ -67,7 +65,6 @@ class Chart5y extends React.Component {
       },
 
       series: [{
-        name: 'test',
         data: [],
         color: '#21ce99'
       }],
