@@ -38,14 +38,42 @@ class Chart5y extends React.Component {
 
   loadData(chart) {
     this.props.requestData(this.apiEndpoint, json => {
-
-      console.log(json);
-
       var data = json.map(item => {
         return [item[this.apiEndpoint].datetime, item[this.apiEndpoint].price];
       });
 
-      this.chart.series[0].setData(data);
+      // For 1W graph: Dataset lives in five series (split by date)
+      if (this.props.selectedGraph === '1W') {
+        // Build an array with 5 nested arrays (each representing a series, but as long as the entire dataset)
+        var series = [[],[],[],[],[]];
+        series.forEach(array => {
+          data.forEach(() => {
+            array.push([]);
+          });
+        });
+        series[0][0] = data[0];
+        var index = 0;
+        // Loop through the entire data set
+        for (var i = 1; i < data.length - 1; i++) {
+          // If data point is a new day
+          if ((new Date(data[i-1][0])).getDate() !== (new Date(data[i][0])).getDate()) {
+            // It should represent a new series
+            series[index][i] = data[i];
+            index++;
+          }
+          // Push the data to the appropriate series and point in the series
+          series[index][i] = data[i];
+        }
+        // Loop thru each series and load it into the chart
+        for (var i = 0; i < series.length; i++) {
+          this.chart.series[i].setData(series[i]);
+        }
+
+      } else {
+        // For 1M, 3M, 1Y and 5Y graphs: Dataset lives in one series
+        this.chart.series[0].setData(data);
+      }
+
     });
   }
 
@@ -64,16 +92,20 @@ class Chart5y extends React.Component {
         }
       },
 
-      series: [{
-        data: [],
-        color: '#21ce99'
-      }],
+      series: [
+        { data: [], color: '#21ce99' },
+        { data: [], color: '#21ce99' },
+        { data: [], color: '#21ce99' },
+        { data: [], color: '#21ce99' },
+        { data: [], color: '#21ce99' }
+    ],
 
       plotOptions: {
         series: {
           animation: false,
           marker: {
             enabled: false,
+            symbol: 'circle',
             states: {
               hover: {
                 lineColor: '#1b1b1d',
@@ -125,7 +157,6 @@ class Chart5y extends React.Component {
 
       xAxis: {
         visible: false,
-        reversed: true,
         crosshair: {
           color: '#8c8c8e'
         }
