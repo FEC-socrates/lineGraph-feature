@@ -93,6 +93,24 @@ Stock.get1mPrices = ticker => {
   ]);
 };
 
+Stock.get3mPrices = ticker => {
+  // Returns a Promise object which resolves to 1m price history for the stock matching the provided ticker.
+  return Stock.aggregate([
+    {
+      $match: {ticker: ticker}
+    },
+    {
+      $project: {'last1yPrices': 1}
+    },
+    {
+      $unwind: '$last1yPrices'
+    },
+    {
+      $limit: 90
+    }
+  ]);
+};
+
 Stock.get1yPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
   return Stock.findOne(

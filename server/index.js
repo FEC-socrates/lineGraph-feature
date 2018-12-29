@@ -47,6 +47,12 @@ app.get('/stocks/:ticker/last1mPrices', (req, res) => {
     .then(results => { res.send(JSON.stringify(results)); });
 });
 
+// GET /stocks/:ticker/last3mPrices returns relevant price history for a stock
+app.get('/stocks/:ticker/last3mPrices', (req, res) => {
+  stocks.get3mPrices(req.params.ticker)
+    .then(results => { res.send(JSON.stringify(results)); });
+});
+
 // GET /stocks/:ticker/last1yPrices returns relevant price history for a stock
 app.get('/stocks/:ticker/last1yPrices', (req, res) => {
   stocks.get1yPrices(req.params.ticker)

@@ -6,12 +6,34 @@ import Highcharts from 'highcharts';
 class Chart5y extends React.Component {
   constructor(props) {
     super(props);
-    this.request5yData = this.request5yData.bind(this);
+    this.loadData = this.loadData.bind(this);
     this.chart = null;
   }
 
-  request5yData(chart) {
-    this.props.requestData('last5yPrices', json => {
+  loadData(chart) {
+    var setChangeCaption = this.props.setChangeCaption;
+    var setDefaultChangeCaption = this.props.setDefaultChangeCaption;
+    var path = '';
+    var defaultCaption;
+
+    if (this.props.selectedGraph === '5Y') {
+      path = 'last5yPrices';
+      defaultCaption = 'Past 5 Years'
+    } else if (this.props.selectedGraph === '1Y') {
+      path = 'last1yPrices';
+      defaultCaption = 'Past Year'
+    } else if (this.props.selectedGraph === '3M') {
+      path = 'last3mPrices';
+      defaultCaption = 'Past 3 Months'
+    } else if (this.props.selectedGraph === '1M') {
+      path = 'last1mPrices';
+      defaultCaption = 'Past Month'
+    }
+
+    setDefaultChangeCaption(defaultCaption);
+    setChangeCaption(defaultCaption);
+
+    this.props.requestData(path, json => {
 
       console.log(json);
 
@@ -24,13 +46,9 @@ class Chart5y extends React.Component {
   }
 
   componentDidMount() {
-    var setSelectedPrice = this.props.setSelectedPrice;
     var setChangeCaption = this.props.setChangeCaption;
-    var setDefaultChangeCaption = this.props.setDefaultChangeCaption;
+    var setSelectedPrice = this.props.setSelectedPrice;
     var tooltipY = this.props.tooltipY;
-    var defaultCaption = 'Past 5 Years';
-    setDefaultChangeCaption(defaultCaption);
-    setChangeCaption(defaultCaption);
 
     this.chart = Highcharts.chart('graph', {
 
@@ -38,7 +56,7 @@ class Chart5y extends React.Component {
         type: 'line',
         backgroundColor: '#1b1b1d',
         events: {
-          load: this.request5yData
+          load: this.loadData
         }
       },
 
@@ -50,6 +68,7 @@ class Chart5y extends React.Component {
 
       plotOptions: {
         series: {
+          animation: false,
           marker: {
             enabled: false,
             states: {

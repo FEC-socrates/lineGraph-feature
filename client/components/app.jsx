@@ -121,6 +121,7 @@ class App extends React.Component {
 
   requestData(path, callback) {
     // Makes a get request to the provided path for a randomly generated stock
+    console.log('requestData called:', path);
     axios.get('/stocks/')
       .then(({data}) => { 
         var randomCompany = data[Math.floor(Math.random() * data.length)];
@@ -128,10 +129,10 @@ class App extends React.Component {
         var ticker = randomCompany.ticker;
         axios.get(`/stocks/${ticker}/${path}`)
           .then(({data}) => { 
-            this.setLatestPrice(data.last5yPrices[0].price);
-            this.setSelectedPrice(data.last5yPrices[0].price);
-            this.setRefStartPrice(data.last5yPrices[data.last5yPrices.length - 1].price);
-            callback(data.last5yPrices); 
+            this.setLatestPrice(data[path][0].price);
+            this.setSelectedPrice(data[path][0].price);
+            this.setRefStartPrice(data[path][data[path].length - 1].price);
+            callback(data[path]); 
           });
       });
   }
@@ -145,7 +146,7 @@ class App extends React.Component {
         <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
         <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
         <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
-        <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
+        <Chart5y key={this.state.selectedGraph} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>
