@@ -46,8 +46,8 @@ const Option = styled.div`
   letter-spacing: 0.25px;
   line-height: 19px;
   margin: 0;
-  color: white;
-  border-bottom: 2px solid transparent;
+  color: ${props => props.selected ? '#21ce99' : 'white'};
+  border-bottom: 2px solid ${props => props.selected ? '#21ce99' : 'white'};
   padding-bottom: 12px;
   margin: 0 12px
 `;
@@ -66,7 +66,8 @@ class App extends React.Component {
       selectedPrice: null,
       refStartPrice: null,
       changeCaption: null,
-      defaultChangeCaption: null
+      defaultChangeCaption: null,
+      selectedGraph: '5Y'
     };
 
     this.requestData = this.requestData.bind(this);
@@ -136,12 +137,12 @@ class App extends React.Component {
         <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
         <Chart5y requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
         <Options>
-          <Option>1D</Option>
-          <Option>1W</Option>
-          <Option>1M</Option>
-          <Option>3M</Option>
-          <Option>1Y</Option>
-          <Option>5Y</Option>
+          <Option selected={this.state.selectedGraph === '1D'}>1D</Option>
+          <Option selected={this.state.selectedGraph === '1W'}>1W</Option>
+          <Option selected={this.state.selectedGraph === '1M'}>1M</Option>
+          <Option selected={this.state.selectedGraph === '3M'}>3M</Option>
+          <Option selected={this.state.selectedGraph === '1Y'}>1Y</Option>
+          <Option selected={this.state.selectedGraph === '5Y'}>5Y</Option>
         </Options>
       </div>
     );
