@@ -18,22 +18,22 @@ class Chart5y extends React.Component {
 
     if (this.props.selectedGraph === '5Y') {
       path = 'last5yPrices';
-      defaultCaption = 'Past 5 Years'
+      defaultCaption = 'Past 5 Years';
     } else if (this.props.selectedGraph === '1Y') {
       path = 'last1yPrices';
-      defaultCaption = 'Past Year'
+      defaultCaption = 'Past Year';
     } else if (this.props.selectedGraph === '3M') {
       path = 'last3mPrices';
-      defaultCaption = 'Past 3 Months'
+      defaultCaption = 'Past 3 Months';
     } else if (this.props.selectedGraph === '1M') {
       path = 'last1mPrices';
-      defaultCaption = 'Past Month'
+      defaultCaption = 'Past Month';
     } else if (this.props.selectedGraph === '1W') {
       path = 'last1wPrices';
-      defaultCaption = 'Past Week'
+      defaultCaption = 'Past Week';
     } else if (this.props.selectedGraph === '1D') {
       path = 'last1dPrices';
-      defaultCaption = 'Today'
+      defaultCaption = 'Today';
     }
 
     setDefaultChangeCaption(defaultCaption);
@@ -44,7 +44,7 @@ class Chart5y extends React.Component {
       console.log(json);
 
       var data = json.map(item => {
-        return [Date.parse(item[path].datetime), item[path].price];
+        return [item[path].datetime, item[path].price];
       });
 
       this.chart.series[0].setData(data);
@@ -114,7 +114,7 @@ class Chart5y extends React.Component {
           setSelectedPrice(this.point.y);
           setChangeCaption('');
           console.log(this.point);
-          var date = new Date(this.point.options.x);
+          var date = new Date(this.point.name);
           date = date.toLocaleDateString('en-us', {month: 'short', day: 'numeric', year: 'numeric'}).toUpperCase();
           return date;
         }
@@ -127,7 +127,6 @@ class Chart5y extends React.Component {
       },
 
       xAxis: {
-        type: 'datetime',
         visible: false,
         reversed: true,
         crosshair: {
