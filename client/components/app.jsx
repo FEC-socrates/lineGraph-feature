@@ -62,24 +62,32 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      ticker: null,
       companyName: null,
       latestPrice: null,
       selectedPrice: null,
       refStartPrice: null,
       changeCaption: null,
       defaultChangeCaption: null,
-      selectedGraph: '5Y'
+      selectedGraph: '5Y',
+      selectedCategory: null
     };
 
     this.requestData = this.requestData.bind(this);
+    this.setTicker = this.setTicker.bind(this);
     this.setCompanyName = this.setCompanyName.bind(this);
     this.setSelectedPrice = this.setSelectedPrice.bind(this);
     this.setLatestPrice = this.setLatestPrice.bind(this);
     this.setRefStartPrice = this.setRefStartPrice.bind(this);
     this.setChangeCaption = this.setChangeCaption.bind(this);
     this.setDefaultChangeCaption = this.setDefaultChangeCaption.bind(this);
+    this.setSelectedCategory = this.setSelectedCategory.bind(this);
     this.handleMouseLeaveChart = this.handleMouseLeaveChart.bind(this);
     this.handleOptionClick = this.handleOptionClick.bind(this);
+  }
+
+  setTicker(string, callback) {
+    this.setState({ticker: string}, callback);
   }
 
   setCompanyName(name) {
@@ -104,6 +112,10 @@ class App extends React.Component {
 
   setDefaultChangeCaption(string) {
     this.setState({defaultChangeCaption: string});
+  }
+
+  setSelectedCategory(string) {
+    this.setState({selectedCategory: string});
   }
 
   handleMouseLeaveChart() {
@@ -133,7 +145,7 @@ class App extends React.Component {
             this.setLatestPrice(data[data.length - 1][path].price);
             this.setSelectedPrice(data[data.length - 1][path].price);
             this.setRefStartPrice(data[0][path].price);
-            callback(data); 
+            this.setTicker(ticker, () => {callback(data)});
           });
       });
   }
@@ -147,7 +159,7 @@ class App extends React.Component {
         <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
         <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
         <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
-        <Chart5y key={this.state.selectedGraph} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
+        <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>

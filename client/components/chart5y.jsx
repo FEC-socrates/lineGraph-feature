@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Highcharts from 'highcharts';
-import $ from 'jquery';
+import axios from 'axios';
 
 class Chart5y extends React.Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class Chart5y extends React.Component {
     this.props.setChangeCaption(this.defaultCaption);
   }
 
-  loadData(chart) {
+  loadData() {
     this.props.requestData(this.apiEndpoint, json => {
       var data = json.map(item => {
         if (item[this.apiEndpoint].priceType) {
@@ -67,8 +67,14 @@ class Chart5y extends React.Component {
         var index = 0;
         // Loop through the entire data set
         for (var i = 1; i < data.length - 1; i++) {
-          // If data point is a new day or a new priceType
-          if ((new Date(data[i-1][0])).getDate() !== (new Date(data[i][0])).getDate() || data[i-1][2] !== data[i][2]) {
+          // For 1w, if data point is a new day
+          if (this.props.selectedGraph === '1W' && ((new Date(data[i-1][0])).getDate() !== (new Date(data[i][0])).getDate())) {
+            // It should represent a new series
+            series[index][i] = data[i];
+            index++;
+          }
+          // For 1d, if data point is a new priceType
+          if (this.props.selectedGraph === '1D' && (data[i-1][2] !== data[i][2])) {
             // It should represent a new series
             series[index][i] = data[i];
             index++;
@@ -80,14 +86,31 @@ class Chart5y extends React.Component {
         console.log(series);
         for (var i = 0; i < series.length; i++) {
           this.chart.series[i].setData(series[i]);
-        }
-
+        }        
       } else {
         // For 1M, 3M, 1Y and 5Y graphs: Dataset lives in one series
         this.chart.series[5].setData(data);
       }
 
+    // If graph is 1D, add plotline
+    if (this.props.selectedGraph === '1D') {
+      this.getYesterdayClose(data => {
+        this.chart.yAxis[0].addPlotLine({
+          value: data[0].endOfDayPrices.price,
+          color: '#7B7B7D',
+          dashStyle: 'Dot',
+          width: 1,
+          id: 'plot-line-yesterdayClose'
+        })
+      })
+    };
+
     });
+  }
+
+  getYesterdayClose(callback) {
+    axios.get(`/stocks/${this.props.ticker}/yesterdayClose/`)
+      .then(({data}) => {callback(data)});
   }
 
   illuminateAllSeries(boolean) {
@@ -121,6 +144,7 @@ class Chart5y extends React.Component {
       chart: {
         type: 'line',
         backgroundColor: '#1b1b1d',
+        spacingLeft: -55,
         events: {
           load: this.loadData
         }
@@ -181,8 +205,20 @@ class Chart5y extends React.Component {
           return {x: point.plotX - 43, y: tooltipY};
         },
         formatter: function() {
+          // Set value for selectedPrice component
           setSelectedPrice(this.point.y);
-          setChangeCaption('');
+
+          // if series is Pre-market or After hours, display that as caption
+          // Otherwise, set caption to blank
+          if (selectedGraph === '1D' && this.series.index === 0) {
+            setChangeCaption('Pre-Market');
+          } else if (selectedGraph === '1D' && this.series.index === 2) {
+            setChangeCaption('After Hours');
+          } else {
+            setChangeCaption('');
+          }
+
+          // Set format of tooltip
           var date = new Date(this.point.name);
           if (selectedGraph === '1W') {
             date = (date.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}) + ', ' + date.toLocaleDateString('en-us', {month: 'short', day:'numeric'}) + ' ET').toUpperCase();
@@ -209,7 +245,7 @@ class Chart5y extends React.Component {
       },
 
       yAxis: {
-        visible: false
+        visible: true
       }
     });
   }

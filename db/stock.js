@@ -22,6 +22,7 @@ var stock = new mongoose.Schema({
   last1wPrices: [
     {
       _id: false,
+      priceType: String,
       datetime: Date,
       price: Number
     }
@@ -70,6 +71,22 @@ Stock.get1dPrices = ticker => {
     { $sort: {
       'last1dPrices.datetime': 1
     } }
+  ]);
+};
+
+Stock.getYesterdayClose = ticker => {
+  // Returns a Promise object which resolves to yesterday's closing price for the stock matching the provided ticker.
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'endOfDayPrices': {
+      $filter: {
+        input: '$last1wPrices',
+        as: 'price',
+        cond: {$eq: ['$$price.priceType', 'End Of Day']}
+      }
+    }, _id: 0} },
+    { $unwind: '$endOfDayPrices' },
+    { $limit: 1 }
   ]);
 };
 

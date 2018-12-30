@@ -27,3 +27,15 @@ body {
   stroke:#21ce99;
   stroke-width: 2;
 } 
+
+.highcharts-yaxis-grid {
+  display: none;
+}
+
+.highcharts-yaxis-labels {
+  display: none;
+}
+
+.highcharts-yaxis {
+  display: none;
+}

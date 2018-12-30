@@ -28,6 +28,14 @@ app.get('/stocks/:ticker', (req, res) => {
     .then(results => { res.send(JSON.stringify(results)); });
 });
 
+
+// GET /stocks/:ticker/yesterdayClose returns yesterday's close price for a stock
+app.get('/stocks/:ticker/yesterdayClose', (req, res) => {
+  stocks.getYesterdayClose(req.params.ticker)
+    .then(results => { res.send(JSON.stringify(results)); });
+});
+
+
 // GET /stocks/:ticker/last1dPrices returns relevant price history for a stock
 app.get('/stocks/:ticker/last1dPrices', (req, res) => {
   stocks.get1dPrices(req.params.ticker)

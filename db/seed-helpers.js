@@ -69,7 +69,7 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     analystBuy: analystBuy,
     platformOwners: platformOwners,
     last1dPrices: [Object.assign({priceType: latestPriceObjType}, latestPriceObj)],
-    last1wPrices: [latestPriceObj],
+    last1wPrices: [Object.assign({priceType: 'Normal'}, latestPriceObj)],
     last1yPrices: [latestPriceObj],
     last5yPrices: [latestPriceObj],
   };
@@ -79,7 +79,7 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     var lastPrice = newStock.last5yPrices[newStock.last5yPrices.length - 1].price;
     var newDateTime = new Date(newStock.last5yPrices[newStock.last5yPrices.length - 1].datetime);
     newDateTime.setDate(newDateTime.getDate() - 7);
-    newStock.last5yPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
+    newStock.last5yPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.03));
   }
 
   // Populate last1y prices
@@ -87,7 +87,7 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     var lastPrice = newStock.last1yPrices[newStock.last1yPrices.length - 1].price;
     var newDateTime = new Date(newStock.last1yPrices[newStock.last1yPrices.length - 1].datetime);
     newDateTime.setDate(newDateTime.getDate() - 1);
-    newStock.last1yPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
+    newStock.last1yPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.03));
   }
 
   // Populate last1w prices
@@ -97,14 +97,16 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
     if (newDateTime.getHours() > 16) {
       newDateTime.setHours(16);
       newDateTime.setMinutes(0);
+      newStock.last1wPrices.push(randPrice("Normal", newDateTime, lastPrice, 0.03));
     } else if (newDateTime.getHours() < 9 || newDateTime.getHours() === 9 && newDateTime.getMinutes() < 40) {
       newDateTime.setDate(newDateTime.getDate() - 1);
       newDateTime.setHours(16);
       newDateTime.setMinutes(0);
+      newStock.last1wPrices.push(randPrice("End Of Day", newDateTime, lastPrice, 0.03));
     } else {
       newDateTime.setMinutes(newDateTime.getMinutes() - 10);
+      newStock.last1wPrices.push(randPrice("Normal", newDateTime, lastPrice, 0.03));
     }
-    newStock.last1wPrices.push(randPrice(undefined, newDateTime, lastPrice, 0.02));
   }
 
   // Populate last1d prices
@@ -115,13 +117,13 @@ var createRandomStock = (ticker, name, analystBuy, platformOwners, latestPrice, 
   for (var i = 0; i < dataPoints ; i++) {
     var lastPrice = newStock.last1dPrices[newStock.last1dPrices.length - 1].price;
     var newDateTime = new Date(newStock.last1dPrices[newStock.last1dPrices.length - 1].datetime);
-    if (newDateTime.getHours() > 16) {
-      newDateTime.setHours(16);
-      newDateTime.setMinutes(0);
+    if (newDateTime.getHours() > 18) {
+      newDateTime.setHours(18);
+      newDateTime.setMinutes(5);
     } else {
       newDateTime.setMinutes(newDateTime.getMinutes() - 5);
     }
-    newStock.last1dPrices.push(randPrice(hoursType(newDateTime), newDateTime, lastPrice, 0.02));
+    newStock.last1dPrices.push(randPrice(hoursType(newDateTime), newDateTime, lastPrice, 0.03));
 
   }
 
