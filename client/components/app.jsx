@@ -36,6 +36,10 @@ const ChangeCaption = styled.span`
   color: #8c8c8e;
 `;
 
+const Captions = styled.div`
+  height: 40px;
+`;
+
 const Options = styled.div`
   display: flex;
 `;
@@ -154,11 +158,20 @@ class App extends React.Component {
     var tooltipY = 110;
     var change = (this.state.selectedPrice - this.state.refStartPrice).toFixed(2);
     var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
+    
+    var afterHours = <div></div>;
+    if (this.state.changeCaption === 'Today') {
+      afterHours = <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>;
+    }
+
     return (
       <div>
         <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
         <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
-        <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
+        <Captions>
+          <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
+          {afterHours}
+        </Captions>
         <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
