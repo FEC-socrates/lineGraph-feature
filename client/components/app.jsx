@@ -69,6 +69,7 @@ class App extends React.Component {
       ticker: null,
       companyName: null,
       latestPrice: null,
+      latestAfterHours: null,
       selectedPrice: null,
       refStartPrice: null,
       changeCaption: null,
@@ -78,10 +79,12 @@ class App extends React.Component {
     };
 
     this.requestData = this.requestData.bind(this);
+    this.getYesterdayClose = this.getYesterdayClose.bind(this);
     this.setTicker = this.setTicker.bind(this);
     this.setCompanyName = this.setCompanyName.bind(this);
     this.setSelectedPrice = this.setSelectedPrice.bind(this);
     this.setLatestPrice = this.setLatestPrice.bind(this);
+    this.setLatestAfterHours = this.setLatestAfterHours.bind(this);
     this.setRefStartPrice = this.setRefStartPrice.bind(this);
     this.setChangeCaption = this.setChangeCaption.bind(this);
     this.setDefaultChangeCaption = this.setDefaultChangeCaption.bind(this);
@@ -104,6 +107,10 @@ class App extends React.Component {
 
   setLatestPrice(num) {
     this.setState({latestPrice: num});
+  }
+
+  setLatestAfterHours(num) {
+    this.setState({latestAfterHours: num});
   }
 
   setRefStartPrice(num) {
@@ -146,25 +153,26 @@ class App extends React.Component {
         axios.get(`/stocks/${ticker}/${path}`)
           .then(({data}) => { 
             console.log(data);
-            this.setLatestPrice(data[data.length - 1][path].price);
-            this.setSelectedPrice(data[data.length - 1][path].price);
-            this.setRefStartPrice(data[0][path].price);
             this.setTicker(ticker, () => {callback(data)});
           });
       });
+  }
+
+  getYesterdayClose(callback) {
+    axios.get(`/stocks/${this.state.ticker}/yesterdayClose/`)
+      .then(({data}) => {callback(data)});
   }
 
   render() {
     var tooltipY = 110;
     var change = (this.state.selectedPrice - this.state.refStartPrice).toFixed(2);
     var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
+    var changeAfterHours = (this.state.latestAfterHours - this.state.selectedPrice).toFixed(2);
+    var changePercentAfterHours = ((this.state.latestAfterHours - this.state.selectedPrice) * 100 / this.state.selectedPrice).toFixed(2);
     
     var afterHours = <div></div>;
-    if (this.state.changeCaption === 'Today') {
-      // For 1d, today should only show price up to 4pm
-      // Prices are all relative to yesterday's closing price
-      // After hours should show price change from 4pm - 6pm.
-      afterHours = <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>After Hours</ChangeCaption></div>;
+    if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
+      afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours)}` : `-$${Math.abs(changeAfterHours)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaption'>After Hours</ChangeCaption></div>;
     }
 
     return (
@@ -175,7 +183,7 @@ class App extends React.Component {
           <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
           {afterHours}
         </Captions>
-        <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} tooltipY={tooltipY}/>
+        <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>

@@ -87,14 +87,35 @@ class Chart5y extends React.Component {
         for (var i = 0; i < series.length; i++) {
           this.chart.series[i].setData(series[i]);
         }        
+      // For 1M, 3M, 1Y and 5Y graphs: 
       } else {
-        // For 1M, 3M, 1Y and 5Y graphs: Dataset lives in one series
+        // Dataset lives in one series
         this.chart.series[5].setData(data);
       }
 
-    // If graph is 1D, add plotline
+    // If graph is 1D
     if (this.props.selectedGraph === '1D') {
-      this.getYesterdayClose(data => {
+
+        // Set the latest available 'Today' price
+        var latestPreMarket = this.chart.series[0].data.filter(item => !!item.y).pop();
+        var latestNormal = this.chart.series[1].data.filter(item => !!item.y).pop();
+        var latestTodayPrice;
+        if (latestNormal) {
+          latestTodayPrice = latestNormal.y;
+        } else {
+          latestTodayPrice = latestPreMarket.y;
+        }
+        this.props.setLatestPrice(latestTodayPrice);
+        this.props.setSelectedPrice(latestTodayPrice);
+
+        // Set the latest available 'After Hours' price
+        var latestAfterHours = this.chart.series[2].data.filter(item => !!item.y).pop();
+        if (latestAfterHours) {
+          this.props.setLatestAfterHours(latestAfterHours.y);
+        }
+
+      // Add plotline of yesterday's close price
+      this.props.getYesterdayClose(data => {
         this.chart.yAxis[0].addPlotLine({
           value: data[0].endOfDayPrices.price,
           color: '#7B7B7D',
@@ -102,16 +123,19 @@ class Chart5y extends React.Component {
           width: 1,
           id: 'plot-line-yesterdayClose'
         });
+
+        // Set reference start price to yesterday's end of day price
         this.props.setRefStartPrice(data[0].endOfDayPrices.price);
       })
-    };
+    } else {
+      // Reference price calculations are common
+      console.log(data);
+      this.props.setLatestPrice(data[data.length - 1][1]);
+      this.props.setSelectedPrice(data[data.length - 1][1]);
+      this.props.setRefStartPrice(data[0][1]);
+    }
 
     });
-  }
-
-  getYesterdayClose(callback) {
-    axios.get(`/stocks/${this.props.ticker}/yesterdayClose/`)
-      .then(({data}) => {callback(data)});
   }
 
   illuminateAllSeries(boolean) {
