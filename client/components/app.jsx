@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Chart5y from './chart5y.jsx';
+import InfoButton from './infoButton.jsx'
 import axios from 'axios';
 import Odometer from 'react-odometerjs';
 
@@ -8,6 +9,11 @@ import Odometer from 'react-odometerjs';
 // ============================================
 // STYLED COMPONENTS
 // ===========================================
+
+const AppContainer = styled.div`
+  display: inline-block;
+  width: 679px;
+`;
 
 const CompanyName = styled.h1`
   font-size: 36px;
@@ -38,6 +44,11 @@ const ChangeCaption = styled.span`
 
 const Captions = styled.div`
   height: 50px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const CaptionsRight = styled.div`
 `;
 
 const Options = styled.div`
@@ -183,12 +194,18 @@ class App extends React.Component {
     var odometerPrice = this.state.selectedPrice ? this.state.selectedPrice + 0.001 : null;
 
     return (
-      <div>
+      <AppContainer>
         <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
         <div><Odometer id='price' value={odometerPrice} format='(,ddd).ddd' duration={300}></Odometer></div>
         <Captions>
-          <div><Change id='change'>{change > 0 ? `+$${Math.abs(change).toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
-          {afterHours}
+          <div>
+            <div><Change id='change'>{change > 0 ? `+$${Math.abs(change).toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
+            {afterHours}
+          </div>
+          <CaptionsRight>
+            <InfoButton />
+            <InfoButton />
+          </CaptionsRight>
         </Captions>
         <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
@@ -199,7 +216,7 @@ class App extends React.Component {
           <Option className='option' selected={this.state.selectedGraph === '1Y'}>1Y</Option>
           <Option className='option' selected={this.state.selectedGraph === '5Y'}>5Y</Option>
         </Options>
-      </div>
+      </AppContainer>
     );
   }
 }
