@@ -101,7 +101,8 @@ class Chart5y extends React.Component {
           dashStyle: 'Dot',
           width: 1,
           id: 'plot-line-yesterdayClose'
-        })
+        });
+        this.props.setRefStartPrice(data[0].endOfDayPrices.price);
       })
     };
 

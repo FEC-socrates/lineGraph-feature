@@ -37,7 +37,7 @@ const ChangeCaption = styled.span`
 `;
 
 const Captions = styled.div`
-  height: 40px;
+  height: 50px;
 `;
 
 const Options = styled.div`
@@ -161,7 +161,10 @@ class App extends React.Component {
     
     var afterHours = <div></div>;
     if (this.state.changeCaption === 'Today') {
-      afterHours = <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>;
+      // For 1d, today should only show price up to 4pm
+      // Prices are all relative to yesterday's closing price
+      // After hours should show price change from 4pm - 6pm.
+      afterHours = <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>After Hours</ChangeCaption></div>;
     }
 
     return (
@@ -172,7 +175,7 @@ class App extends React.Component {
           <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
           {afterHours}
         </Captions>
-        <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} tooltipY={tooltipY}/>
+        <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>
