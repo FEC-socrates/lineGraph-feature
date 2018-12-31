@@ -55,6 +55,10 @@ const Option = styled.div`
   padding-bottom: 12px;
   margin: 0 12px;
   cursor: pointer;
+
+  :hover {
+    color: #21ce99;
+  }
 `;
 
 // ============================================
