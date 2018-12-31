@@ -81,7 +81,7 @@ class App extends React.Component {
       selectedGraph: '5Y',
       selectedCategory: null
     };
-
+    
     this.requestData = this.requestData.bind(this);
     this.getYesterdayClose = this.getYesterdayClose.bind(this);
     this.setTicker = this.setTicker.bind(this);
@@ -169,22 +169,25 @@ class App extends React.Component {
 
   render() {
     var tooltipY = 110;
-    var change = (this.state.selectedPrice - this.state.refStartPrice).toFixed(2);
+    var change = this.state.selectedPrice - this.state.refStartPrice;
     var changePercent = ((this.state.selectedPrice - this.state.refStartPrice) * 100 / this.state.refStartPrice).toFixed(2);
-    var changeAfterHours = (this.state.latestAfterHours - this.state.selectedPrice).toFixed(2);
+    var changeAfterHours = this.state.latestAfterHours - this.state.selectedPrice;
     var changePercentAfterHours = ((this.state.latestAfterHours - this.state.selectedPrice) * 100 / this.state.selectedPrice).toFixed(2);
     
     var afterHours = <div></div>;
     if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
-      afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours)}` : `-$${Math.abs(changeAfterHours)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaption'>After Hours</ChangeCaption></div>;
+      afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaption'>After Hours</ChangeCaption></div>;
     }
+
+    // Workaround for a known bug with Odometer where it does not show decimals if they are 0s.
+    var odometerPrice = this.state.selectedPrice ? this.state.selectedPrice + 0.001 : null;
 
     return (
       <div>
         <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
-        <div><Odometer id='price'value={this.state.selectedPrice} format='(,ddd).dd' duration={300}></Odometer></div>
+        <div><Odometer id='price' value={odometerPrice} format='(,ddd).ddd' duration={300}></Odometer></div>
         <Captions>
-          <div><Change id='change'>{change > 0 ? `+$${Math.abs(change)}` : `-$${Math.abs(change)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
+          <div><Change id='change'>{change > 0 ? `+$${Math.abs(change).toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
           {afterHours}
         </Captions>
         <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
