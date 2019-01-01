@@ -40,10 +40,10 @@ describe('Chart Component for 5Y, 1Y, 3M and 1M Views', () => {
   });
 
   it('should contain data stored into the graph through loadData', done => {
-    chart.setProps({selectedGraph: '1W'});
-    chart.instance().apiEndpoint = 'last1wPrices';
+    chart.setProps({selectedGraph: '5Y'});
+    chart.instance().apiEndpoint = 'last5yPrices';
     chart.instance().loadData(() => {
-      expect(chart.instance().chart.series[0].data.length).not.toEqual(0);
+      expect(chart.instance().chart.series[5].data.length).not.toEqual(0);
       done();
     });
   });
