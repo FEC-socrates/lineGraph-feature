@@ -196,7 +196,16 @@ class App extends React.Component {
     // A second line of price change captions should only show for the 1D graph view
     var afterHours = <div></div>;
     if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
-      afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaptionAfterHours'>After Hours</ChangeCaption></div>;
+      afterHours = 
+        <div>
+          <Change id='changeAfterHours'>
+            {changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} 
+            {' (' + changePercentAfterHours + '%) '}
+          </Change>
+          <ChangeCaption id='changeCaptionAfterHours'>
+            After Hours
+          </ChangeCaption>
+        </div>;
     }
 
     // Workaround for a known bug with Odometer where it does not show decimals if they are 0s.
@@ -205,18 +214,49 @@ class App extends React.Component {
     return (
       <AppContainer>
         <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
+
         <div><Odometer id='price' value={odometerPrice} format='(,ddd).ddd' duration={300}></Odometer></div>
+
         <Captions>
           <div>
-            <div><Change id='change'>{change > 0 ? `+$${Math.abs(change).toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`} {'(' + changePercent + '%) '}</Change><ChangeCaption id='changeCaption'>{this.state.changeCaption}</ChangeCaption></div>
+            <div>
+              <Change id='change'>
+                {change > 0 ? `+$${Math.abs(change).toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`} 
+                {' (' + changePercent + '%) '}
+              </Change>
+              <ChangeCaption id='changeCaption'>
+                {this.state.changeCaption}
+              </ChangeCaption>
+            </div>
             {afterHours}
           </div>
           <CaptionsRight>
-            <InfoButton infoType='analystBuy' value={this.state.analystBuy + '%'} text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} width='70px'/>
-            <InfoButton infoType='platformOwners' value={this.state.platformOwners} text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} width='100px'/>
+            <InfoButton 
+              infoType='analystBuy' 
+              value={this.state.analystBuy + '%'} 
+              text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} width='70px'/>
+            <InfoButton 
+              infoType='platformOwners' 
+              value={this.state.platformOwners} 
+              text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} width='100px'/>
           </CaptionsRight>
         </Captions>
-        <Chart key={this.state.selectedGraph} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
+
+        <Chart 
+          key={this.state.selectedGraph} 
+          ticker={this.state.ticker} 
+          selectedGraph={this.state.selectedGraph} 
+          requestData={this.requestData} 
+          getYesterdayClose={this.getYesterdayClose} 
+          setSelectedPrice={this.setSelectedPrice} 
+          handleMouseLeaveChart={this.handleMouseLeaveChart} 
+          setChangeCaption={this.setChangeCaption} 
+          setDefaultChangeCaption={this.setDefaultChangeCaption} 
+          setRefStartPrice={this.setRefStartPrice} 
+          setLatestPrice={this.setLatestPrice} 
+          setLatestAfterHours={this.setLatestAfterHours} 
+          tooltipY={tooltipY}/>
+
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>

@@ -91,7 +91,11 @@ class InfoButton extends React.Component {
     }
 
     return (
-      <InfoButtonContainer className='infoButtonContainer' width={this.props.width} onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
+      <InfoButtonContainer 
+        className='infoButtonContainer' 
+        width={this.props.width} 
+        onMouseOver={this.handleMouseOver} 
+        onMouseLeave={this.handleMouseLeave}>
         <Button>
           {icon}
           <Info className='infoButtonValue'>{this.props.value}</Info>

@@ -21,12 +21,23 @@ import { mockRequestData, mockGetYesterdayClose} from './setupTests';
   ReactDOM.render(<App/>, document.getElementById('app'));
   var app = mount(<App/>);
   var mockHandleMouseLeaveChart = jest.fn();
+  var chartComponent = <Chart 
+    requestData={mockRequestData} 
+    handleMouseLeaveChart={mockHandleMouseLeaveChart} 
+    setChangeCaption={app.instance().setChangeCaption} 
+    setDefaultChangeCaption={app.instance().setDefaultChangeCaption} 
+    setLatestPrice={app.instance().setLatestPrice} 
+    setSelectedPrice={app.instance().setSelectedPrice} 
+    setRefStartPrice={app.instance().setRefStartPrice} 
+    setLatestAfterHours={app.instance().setLatestAfterHours} 
+    getYesterdayClose={mockGetYesterdayClose}
+  />
 
-  var chart = mount(<Chart requestData={mockRequestData} handleMouseLeaveChart={mockHandleMouseLeaveChart} setChangeCaption={app.instance().setChangeCaption} setDefaultChangeCaption={app.instance().setDefaultChangeCaption} setLatestPrice={app.instance().setLatestPrice} setSelectedPrice={app.instance().setSelectedPrice} setRefStartPrice={app.instance().setRefStartPrice} setLatestAfterHours={app.instance().setLatestAfterHours} getYesterdayClose={mockGetYesterdayClose}/>);
+  var chart = mount(chartComponent);
 
   beforeEach(() => {
     chart.unmount();
-    chart = mount(<Chart requestData={mockRequestData} handleMouseLeaveChart={mockHandleMouseLeaveChart} setChangeCaption={app.instance().setChangeCaption} setDefaultChangeCaption={app.instance().setDefaultChangeCaption} setLatestPrice={app.instance().setLatestPrice} setSelectedPrice={app.instance().setSelectedPrice} setRefStartPrice={app.instance().setRefStartPrice} setLatestAfterHours={app.instance().setLatestAfterHours} getYesterdayClose={mockGetYesterdayClose}/>);
+    chart = mount(chartComponent);
   })
 
 // ===========================================
