@@ -4,6 +4,8 @@ jobs:
     docker:
       # Primary container image
       - image: circleci/node:10.14.2
+        environment: 
+          TZ: "/usr/share/zoneinfo/America/Los_Angeles"
       # Service container images
       - image: circleci/mongo:4.0.5
     steps:
@@ -22,4 +24,3 @@ jobs:
           command: npm run start
           background: true
       - run: npm run test
-      - run: sleep 20

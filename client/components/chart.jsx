@@ -85,7 +85,6 @@ class Chart extends React.Component {
             index++;
           }
           // Push the data to the appropriate series and data point in the series
-          console.log(index, i);
           series[index][i] = data[i];
         }
         // Loop thru each series and load it into Highcharts
