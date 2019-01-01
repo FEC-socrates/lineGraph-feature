@@ -155,7 +155,7 @@ class App extends React.Component {
   }
 
   requestData(path, callback) {
-    // Makes a get request to the provided path for a randomly generated stock, and then invokes any provided callback
+  // Makes a get request to the provided path for a randomly generated stock, and then invokes any provided callback
 
     // Get a list of all available stocks
     axios.get('/stocks/')
@@ -181,7 +181,7 @@ class App extends React.Component {
   }
 
   getYesterdayClose(callback) {
-    // Makes a get request specifically for yesterday's close price, and then invokes any provided callback
+  // Makes a get request specifically for yesterday's close price, and then invokes any provided callback
     axios.get(`/stocks/${this.state.ticker}/yesterdayClose/`)
       .then(({data}) => {callback(data)});
   }

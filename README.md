@@ -35,7 +35,7 @@ Unit tests are conducted by Jest and Enzyme. To run unit tests, run 'npm run tes
 
 ## Requirements
 
-This project is primarily built with React, Node and MongoDB / Mongoose. 
+This project is primarily built with React, Node and MongoDB / Mongoose. Highcharts is used as the charting library.
 See package.json for full dependencies.
 
 ## Development

@@ -78,14 +78,16 @@ class InfoButton extends React.Component {
   }
 
   render() {
-    var tooltip = <span></span>
-    if (this.state.hover) {
-      tooltip = <span><Tooltip>{this.props.text}</Tooltip></span>
-    }
-
+    // Render the correct icon based on prop
     var icon = <AnalystBuyIcon fill={this.state.hover ? '#0e0d0d' : 'white'} />
     if (this.props.infoType === 'platformOwners') {
       icon = <PlatformOwnersIcon fill={this.state.hover ? '#0e0d0d' : 'white'} />
+    }
+
+    // Show tooltip only on mouseover
+    var tooltip = <span></span>
+    if (this.state.hover) {
+      tooltip = <span><Tooltip>{this.props.text}</Tooltip></span>
     }
 
     return (

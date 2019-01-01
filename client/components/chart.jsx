@@ -39,7 +39,7 @@ class Chart extends React.Component {
   }
 
   loadData(callback = () => {}) {
-    // Fetches price data from the server and loads the data into Highcharts. Called by Highcharts on chart load.
+  // Fetches price data from the server and loads the data into Highcharts. Called by Highcharts on chart load.
     this.props.requestData(this.apiEndpoint, json => {
       // Transform the shape of the data to exactly what Highcharts requires
       var data = json.map(item => {
@@ -51,7 +51,7 @@ class Chart extends React.Component {
         }
       });
 
-      // Data must be loaded differently depending on the graph type selected to allow for differences in the graph view (e.g. highlighting portions of the graph on mouseOver)
+      // Data must be loaded differently depending on the graph type to allow for differences in the graph view (e.g. highlighting portions of the graph on mouseOver)
       if (this.props.selectedGraph === '1W' || this.props.selectedGraph === '1D') {
         // For 1W graph: Dataset lives in five series (split by date)
         if (this.props.selectedGraph === '1W') {
@@ -72,52 +72,52 @@ class Chart extends React.Component {
         var index = 0;
         // Loop through the entire data set
         for (var i = 1; i < data.length - 1; i++) {
-          // For 1w, if data point is a new day
+          // For the 1W graph, if data point is a new day
           if (this.props.selectedGraph === '1W' && ((new Date(data[i-1][0])).getDate() !== (new Date(data[i][0])).getDate())) {
             // It should represent a new series
             series[index][i] = data[i];
             index++;
           }
-          // For 1d, if data point is a new priceType
+          // For the 1D graph, if data point is a new priceType
           if (this.props.selectedGraph === '1D' && (data[i-1][2] !== data[i][2])) {
             // It should represent a new series
             series[index][i] = data[i];
             index++;
           }
-          // Push the data to the appropriate series and point in the series
+          // Push the data to the appropriate series and data point in the series
           series[index][i] = data[i];
         }
-        // Loop thru each series and load it into the chart
-        console.log(series);
+        // Loop thru each series and load it into Highcharts
         for (var i = 0; i < series.length; i++) {
           this.chart.series[i].setData(series[i]);
         }        
-      // For 1M, 3M, 1Y and 5Y graphs: 
+      // Otherwise, for 1M, 3M, 1Y and 5Y graphs: 
       } else {
-        // Dataset lives in one series
+        // Dataset just lives in one series. Load that into Highcharts
         this.chart.series[5].setData(data);
       }
 
+    // Price change captions also behave differently for the 1D graph vs other graphs
     // If graph is 1D
     if (this.props.selectedGraph === '1D') {
 
-        // Set the latest available 'Today' price
-        var latestPreMarket = this.chart.series[0].data.filter(item => !!item.y).pop();
-        var latestNormal = this.chart.series[1].data.filter(item => !!item.y).pop();
-        var latestTodayPrice;
-        if (latestNormal) {
-          latestTodayPrice = latestNormal.y;
-        } else {
-          latestTodayPrice = latestPreMarket.y;
-        }
-        this.props.setLatestPrice(latestTodayPrice);
-        this.props.setSelectedPrice(latestTodayPrice);
+      // The latest available 'Today' price should be the latest of whatever Pre-Market or Normal Hour prices are available
+      var latestPreMarket = this.chart.series[0].data.filter(item => !!item.y).pop();
+      var latestNormal = this.chart.series[1].data.filter(item => !!item.y).pop();
+      var latestTodayPrice;
+      if (latestNormal) {
+        latestTodayPrice = latestNormal.y;
+      } else {
+        latestTodayPrice = latestPreMarket.y;
+      }
+      this.props.setLatestPrice(latestTodayPrice);
+      this.props.setSelectedPrice(latestTodayPrice);
 
-        // Set the latest available 'After Hours' price
-        var latestAfterHours = this.chart.series[2].data.filter(item => !!item.y).pop();
-        if (latestAfterHours) {
-          this.props.setLatestAfterHours(latestAfterHours.y);
-        }
+      // The latest available 'After Hours' price also needs to be obtained
+      var latestAfterHours = this.chart.series[2].data.filter(item => !!item.y).pop();
+      if (latestAfterHours) {
+        this.props.setLatestAfterHours(latestAfterHours.y);
+      }
 
       // Add plotline of yesterday's close price
       this.props.getYesterdayClose(data => {
@@ -133,13 +133,13 @@ class Chart extends React.Component {
         this.props.setRefStartPrice(data[0].endOfDayPrices.price);
       })
     } else {
-      // Reference price calculations are common
-      console.log(data);
+      // For other graph types, just set the reference start price as the first data point and the latest price as the last data point
       this.props.setLatestPrice(data[data.length - 1][1]);
       this.props.setSelectedPrice(data[data.length - 1][1]);
       this.props.setRefStartPrice(data[0][1]);
     }
 
+    // If there are any callback functions provided, invoke it.
     if (typeof callback === 'function') {
       callback();
     }
@@ -148,6 +148,7 @@ class Chart extends React.Component {
   }
 
   illuminateAllSeries(boolean) {
+  // Sets all series in the chart to be 'illuminated' or not depending on the boolean
     var allSeries = document.getElementsByClassName('highcharts-series');
     for (var i = 0; i < allSeries.length; i++) {
       var element = allSeries[i].getElementsByClassName('highcharts-graph')[0];
@@ -162,6 +163,7 @@ class Chart extends React.Component {
   }
 
   illuminteOneLine(index) {
+  // Sets the specific series provided by the index number to be 'illuminated'
     var allSeries = document.getElementsByClassName('highcharts-series');
     var selectedSeries = allSeries[index].getElementsByClassName('highcharts-graph')[0];
     selectedSeries.classList.remove('unfocused');
@@ -173,6 +175,7 @@ class Chart extends React.Component {
     var selectedGraph = this.props.selectedGraph;
     var tooltipY = this.props.tooltipY;
 
+    // Render Highcharts
     this.chart = Highcharts.chart('graph', {
 
       chart: {
@@ -184,6 +187,7 @@ class Chart extends React.Component {
         }
       },
 
+      // Data without 'zones' that must be illuminated on mouseover can all be loaded into the 'uncategorized' series. Otherwise, load up to 5 'zones' that illuminate on mouseover using series cat1-cat5.
       series: [
         { name: 'cat1', data: [] },
         { name: 'cat2', data: [] },
@@ -198,8 +202,30 @@ class Chart extends React.Component {
           animation: false,
           events: {
             mouseOver: (e) => {
+            // When mousing over a data series
+
+              // Illuminate that series
               this.illuminateAllSeries(false);
               this.illuminteOneLine(e.target.index);
+
+              // if series is Pre-market or After hours, display that as caption
+              // Otherwise, set caption to blank
+              if (selectedGraph === '1D' && e.target.index === 0) {
+                setChangeCaption('Pre-Market');
+              } else if (selectedGraph === '1D' && e.target.index === 2) {
+                setChangeCaption('After Hours');
+              } else {
+                setChangeCaption('');
+              }
+            }
+          },
+          point: {
+            events: {
+              mouseOver: (e) => {
+              // When mousing over a data point
+                // Show value in selectedPrice component
+                setSelectedPrice(e.target.y);
+              }
             }
           },
           marker: {
@@ -239,20 +265,7 @@ class Chart extends React.Component {
           return {x: point.plotX - 43, y: tooltipY};
         },
         formatter: function() {
-          // Set value for selectedPrice component
-          setSelectedPrice(this.point.y);
-
-          // if series is Pre-market or After hours, display that as caption
-          // Otherwise, set caption to blank
-          if (selectedGraph === '1D' && this.series.index === 0) {
-            setChangeCaption('Pre-Market');
-          } else if (selectedGraph === '1D' && this.series.index === 2) {
-            setChangeCaption('After Hours');
-          } else {
-            setChangeCaption('');
-          }
-
-          // Set format of tooltip
+          // Set format of tooltip based on the graph type
           var date = new Date(this.point.name);
           if (selectedGraph === '1W') {
             date = (date.toLocaleTimeString('en-us', {hour: 'numeric', minute: '2-digit'}) + ', ' + date.toLocaleDateString('en-us', {month: 'short', day:'numeric'}) + ' ET').toUpperCase();
@@ -287,7 +300,7 @@ class Chart extends React.Component {
   render() {
     return (
       <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(); this.illuminateAllSeries(true);}}>
-        <div id='graph'>Chart Goes HereX</div>
+        <div id='graph'></div>
       </div>
     );
   }
