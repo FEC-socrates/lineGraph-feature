@@ -8,11 +8,18 @@ jobs:
       - image: circleci/mongo:4.0.5
     steps:
       - checkout
-      - run: echo "A first hello"
       - run: npm install
-      - run: npm run configDB
-      - run: sleep 3
-      - run: pkill -npm
-      - run: npm run seed
-      - run: npm run start
+      - run: 
+          name: Configure DB
+          command: npm run configDB
+          background: true
+      - run: 
+          name: Seed DB
+          command: npm run seed
+          background: true
+      - run: 
+          name: Start server
+          command: npm run start
+          background: true
       - run: npm run test
+      - run: sleep 20
