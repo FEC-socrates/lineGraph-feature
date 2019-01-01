@@ -211,8 +211,8 @@ class App extends React.Component {
             {afterHours}
           </div>
           <CaptionsRight>
-            <InfoButton value={this.state.analystBuy + '%'} text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} icon='./label.svg'/>
-            <InfoButton value={this.state.platformOwners} text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} icon='./person.svg'/>
+            <InfoButton value={this.state.analystBuy + '%'} text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} icon='./label.svg' width='70px'/>
+            <InfoButton value={this.state.platformOwners} text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} icon='./person.svg' width='100px'/>
           </CaptionsRight>
         </Captions>
         <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
