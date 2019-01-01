@@ -31,7 +31,7 @@ To view the component in your browser:
 Code is served from a bundle.js produced by Webpack. If you are making changes to the code, you will need to rebundle. 
   - Rebundle by running 'npm run build'. Webpack will automatically watch for changes and rebundle on file change.
 
-Unit tests are conducted by Jest and Enzyme. To run unit tests, run 'npm run test'.
+Unit tests are conducted by Jest and Enzyme. To run unit tests, run 'npm run test'. (Make sure your server is also running).
 
 ## Requirements
 

@@ -10,3 +10,7 @@ jobs:
       - checkout
       - run: echo "A first hello"
       - run: npm install
+      - run: npm run configDB
+      - run: npm run seed
+      - run: npm run start
+      - run: npm run test
