@@ -48,10 +48,10 @@ class InfoButton extends React.Component {
     return (
       <InfoButtonContainer>
         <Button>
-          <img src='./person.svg'/>
-          Test
+          <img src={this.props.icon}/>
+          {this.props.value}
         </Button>
-        <Tooltip>This is a very long tooltip with text that will span multiple lines</Tooltip>
+        <Tooltip>{this.props.text}</Tooltip>
       </InfoButtonContainer>
     )
   }

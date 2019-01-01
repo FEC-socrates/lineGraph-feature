@@ -90,7 +90,9 @@ class App extends React.Component {
       changeCaption: null,
       defaultChangeCaption: null,
       selectedGraph: '5Y',
-      selectedCategory: null
+      selectedCategory: null,
+      analystBuy: null,
+      platformOwners: null
     };
     
     this.requestData = this.requestData.bind(this);
@@ -165,9 +167,15 @@ class App extends React.Component {
         var randomCompany = data[Math.floor(Math.random() * data.length)];
         this.setCompanyName(randomCompany.name);
         var ticker = randomCompany.ticker;
+        axios.get(`/stocks/${ticker}`)
+          .then(({data}) => {
+            this.setState({
+              analystBuy: (data.analystBuy*100).toFixed(0),
+              platformOwners: data.platformOwners.toLocaleString()
+            });
+          });
         axios.get(`/stocks/${ticker}/${path}`)
           .then(({data}) => { 
-            console.log(data);
             this.setTicker(ticker, () => {callback(data)});
           });
       });
@@ -203,8 +211,8 @@ class App extends React.Component {
             {afterHours}
           </div>
           <CaptionsRight>
-            <InfoButton />
-            <InfoButton />
+            <InfoButton value={this.state.analystBuy + '%'} text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} icon='./label.svg'/>
+            <InfoButton value={this.state.platformOwners} text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} icon='./person.svg'/>
           </CaptionsRight>
         </Captions>
         <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
