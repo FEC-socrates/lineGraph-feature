@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # Primary container image
+      - image: circleci/node:10.14.2
+        environment: 
+          TZ: "/usr/share/zoneinfo/America/Los_Angeles"
+      # Service container images
+      - image: circleci/mongo:4.0.5
+    steps:
+      - checkout
+      - run: npm install
+      - run: 
+          name: Configure DB
+          command: npm run configDB
+          background: true
+      - run: 
+          name: Seed DB
+          command: npm run seed
+          background: true
+      - run: 
+          name: Start server
+          command: npm run start
+          background: true
+      - run: npm run test
