@@ -87,14 +87,14 @@ class InfoButton extends React.Component {
     // Show tooltip only on mouseover
     var tooltip = <span></span>
     if (this.state.hover) {
-      tooltip = <span><Tooltip>{this.props.text}</Tooltip></span>
+      tooltip = <span><Tooltip className='infoButtonTooltip'>{this.props.text}</Tooltip></span>
     }
 
     return (
-      <InfoButtonContainer width={this.props.width} onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
+      <InfoButtonContainer className='infoButtonContainer' width={this.props.width} onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <Button>
           {icon}
-          <Info>{this.props.value}</Info>
+          <Info className='infoButtonValue'>{this.props.value}</Info>
         </Button>
         {tooltip}
       </InfoButtonContainer>
