@@ -11,6 +11,8 @@ jobs:
       - run: echo "A first hello"
       - run: npm install
       - run: npm run configDB
+      - run: sleep 3
+      - run: pkill -npm
       - run: npm run seed
       - run: npm run start
       - run: npm run test
