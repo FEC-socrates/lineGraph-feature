@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Highcharts from 'highcharts';
 import axios from 'axios';
+import { callbackify } from 'util';
 
 class Chart5y extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class Chart5y extends React.Component {
     this.props.setChangeCaption(this.defaultCaption);
   }
 
-  loadData() {
+  loadData(callback = () => {}) {
     this.props.requestData(this.apiEndpoint, json => {
       var data = json.map(item => {
         if (item[this.apiEndpoint].priceType) {
@@ -133,6 +134,10 @@ class Chart5y extends React.Component {
       this.props.setLatestPrice(data[data.length - 1][1]);
       this.props.setSelectedPrice(data[data.length - 1][1]);
       this.props.setRefStartPrice(data[0][1]);
+    }
+
+    if (typeof callback === 'function') {
+      callback();
     }
 
     });

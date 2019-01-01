@@ -105,7 +105,6 @@ class App extends React.Component {
     this.setRefStartPrice = this.setRefStartPrice.bind(this);
     this.setChangeCaption = this.setChangeCaption.bind(this);
     this.setDefaultChangeCaption = this.setDefaultChangeCaption.bind(this);
-    this.setSelectedCategory = this.setSelectedCategory.bind(this);
     this.handleMouseLeaveChart = this.handleMouseLeaveChart.bind(this);
     this.handleOptionClick = this.handleOptionClick.bind(this);
   }
@@ -140,10 +139,6 @@ class App extends React.Component {
 
   setDefaultChangeCaption(string) {
     this.setState({defaultChangeCaption: string});
-  }
-
-  setSelectedCategory(string) {
-    this.setState({selectedCategory: string});
   }
 
   handleMouseLeaveChart() {
@@ -195,7 +190,7 @@ class App extends React.Component {
     
     var afterHours = <div></div>;
     if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
-      afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaption'>After Hours</ChangeCaption></div>;
+      afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaptionAfterHours'>After Hours</ChangeCaption></div>;
     }
 
     // Workaround for a known bug with Odometer where it does not show decimals if they are 0s.
@@ -215,7 +210,7 @@ class App extends React.Component {
             <InfoButton infoType='platformOwners' value={this.state.platformOwners} text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} width='100px'/>
           </CaptionsRight>
         </Captions>
-        <Chart5y key={this.state.selectedGraph} setSelectedCategory={this.setSelectedCategory} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
+        <Chart5y key={this.state.selectedGraph} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>
