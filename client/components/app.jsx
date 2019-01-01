@@ -89,7 +89,7 @@ class App extends React.Component {
       refStartPrice: null,
       changeCaption: null,
       defaultChangeCaption: null,
-      selectedGraph: '5Y',
+      selectedGraph: '1D',
       selectedCategory: null,
       analystBuy: null,
       platformOwners: null
