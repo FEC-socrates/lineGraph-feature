@@ -17,3 +17,33 @@ body {
   color: white;
   font-size: 36px;
 }
+
+.odometer .odometer-inside .odometer-digit:last-child {
+    display: none
+}
+
+.odometer .odometer-inside:before {
+  content: "$"
+}
+
+.highcharts-series .highcharts-graph.unfocused {
+  stroke:#006850;
+  stroke-width: 2;
+} 
+
+.highcharts-series .highcharts-graph {
+  stroke:#21ce99;
+  stroke-width: 2;
+} 
+
+.highcharts-yaxis-grid {
+  display: none;
+}
+
+.highcharts-yaxis-labels {
+  display: none;
+}
+
+.highcharts-yaxis {
+  display: none;
+}

@@ -22,6 +22,7 @@ var stock = new mongoose.Schema({
   last1wPrices: [
     {
       _id: false,
+      priceType: String,
       datetime: Date,
       price: Number
     }
@@ -63,48 +64,92 @@ Stock.getInfo = ticker => {
 
 Stock.get1dPrices = ticker => {
   // Returns a Promise object which resolves to 1d price history for the stock matching the provided ticker.
-  return Stock.findOne(
-    {ticker: ticker}, 
-    {'last1dPrices': 1});
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last1dPrices': 1, _id: 0} },
+    { $unwind: '$last1dPrices' },
+    { $sort: {
+      'last1dPrices.datetime': 1
+    } }
+  ]);
+};
+
+Stock.getYesterdayClose = ticker => {
+  // Returns a Promise object which resolves to yesterday's closing price for the stock matching the provided ticker.
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'endOfDayPrices': {
+      $filter: {
+        input: '$last1wPrices',
+        as: 'price',
+        cond: {$eq: ['$$price.priceType', 'End Of Day']}
+      }
+    }, _id: 0} },
+    { $unwind: '$endOfDayPrices' },
+    { $limit: 1 }
+  ]);
 };
 
 Stock.get1wPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
-  return Stock.findOne(
-    {ticker: ticker}, 
-    {'last1wPrices': 1});
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last1wPrices': 1, _id: 0} },
+    { $unwind: '$last1wPrices' },
+    { $sort: {
+      'last1wPrices.datetime': 1
+    } }
+  ]);
 };
 
 Stock.get1mPrices = ticker => {
   // Returns a Promise object which resolves to 1m price history for the stock matching the provided ticker.
   return Stock.aggregate([
-    {
-      $match: {ticker: ticker}
-    },
-    {
-      $project: {'last1yPrices': 1}
-    },
-    {
-      $unwind: '$last1yPrices'
-    },
-    {
-      $limit: 30
-    }
+    { $match: {ticker: ticker} },
+    { $project: {'last1mPrices': '$last1yPrices', _id: 0 } },
+    { $unwind: '$last1mPrices' },
+    { $limit: 30 },
+    { $sort: {
+      'last1mPrices.datetime': 1
+    } }
+  ]);
+};
+
+Stock.get3mPrices = ticker => {
+  // Returns a Promise object which resolves to 1m price history for the stock matching the provided ticker.
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last3mPrices': '$last1yPrices', _id: 0 } },
+    { $unwind: '$last3mPrices' },
+    { $limit: 90 },
+    { $sort: {
+      'last3mPrices.datetime': 1
+    } }
   ]);
 };
 
 Stock.get1yPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
-  return Stock.findOne(
-    {ticker: ticker}, 
-    {'last1yPrices': 1});
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last1yPrices': 1, _id: 0} },
+    { $unwind: '$last1yPrices' },
+    { $sort: {
+      'last1yPrices.datetime': 1
+    } }
+  ]);
 };
 
 Stock.get5yPrices = ticker => {
   // Returns a Promise object which resolves to 1w price history for the stock matching the provided ticker.
-  return Stock.findOne(
-    {ticker: ticker}, 
-    {'last5yPrices': 1});
+  return Stock.aggregate([
+    { $match: {ticker: ticker} },
+    { $project: {'last5yPrices': 1, _id: 0} },
+    { $unwind: '$last5yPrices' },
+    { $sort: {
+      'last5yPrices.datetime': 1
+    } }
+  ]);
 };
 
 
