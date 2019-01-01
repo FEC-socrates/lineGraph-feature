@@ -24,3 +24,8 @@ coverage
 build/
 dist/
 
+# Private Files
+pushConfig.sh
+
+# Webpack Bundle
+bundle.js
