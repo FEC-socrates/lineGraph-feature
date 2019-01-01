@@ -5,7 +5,7 @@ import Highcharts from 'highcharts';
 import axios from 'axios';
 import { callbackify } from 'util';
 
-class Chart5y extends React.Component {
+class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.loadData = this.loadData.bind(this);
@@ -39,8 +39,11 @@ class Chart5y extends React.Component {
   }
 
   loadData(callback = () => {}) {
+    // Fetches price data from the server and loads the data into Highcharts. Called by Highcharts on chart load.
     this.props.requestData(this.apiEndpoint, json => {
+      // Transform the shape of the data to exactly what Highcharts requires
       var data = json.map(item => {
+        // If there is no priceType property, don't add it to the data
         if (item[this.apiEndpoint].priceType) {
           return [item[this.apiEndpoint].datetime, item[this.apiEndpoint].price, item[this.apiEndpoint].priceType];
         } else {
@@ -48,6 +51,7 @@ class Chart5y extends React.Component {
         }
       });
 
+      // Data must be loaded differently depending on the graph type selected to allow for differences in the graph view (e.g. highlighting portions of the graph on mouseOver)
       if (this.props.selectedGraph === '1W' || this.props.selectedGraph === '1D') {
         // For 1W graph: Dataset lives in five series (split by date)
         if (this.props.selectedGraph === '1W') {
@@ -289,4 +293,4 @@ class Chart5y extends React.Component {
   }
 }
 
-export default Chart5y;
+export default Chart;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Chart5y from './chart5y.jsx';
+import Chart from './chart.jsx';
 import InfoButton from './infoButton.jsx'
 import axios from 'axios';
 import Odometer from 'react-odometerjs';
@@ -155,13 +155,16 @@ class App extends React.Component {
   }
 
   requestData(path, callback) {
-    // Makes a get request to the provided path for a randomly generated stock
-    console.log('requestData called:', path);
+    // Makes a get request to the provided path for a randomly generated stock, and then invokes any provided callback
+
+    // Get a list of all available stocks
     axios.get('/stocks/')
       .then(({data}) => { 
+        // Select a random company from the list
         var randomCompany = data[Math.floor(Math.random() * data.length)];
         this.setCompanyName(randomCompany.name);
         var ticker = randomCompany.ticker;
+        // Get details for the selected company
         axios.get(`/stocks/${ticker}`)
           .then(({data}) => {
             this.setState({
@@ -169,6 +172,7 @@ class App extends React.Component {
               platformOwners: data.platformOwners.toLocaleString()
             });
           });
+        // Get price history for the selected company
         axios.get(`/stocks/${ticker}/${path}`)
           .then(({data}) => { 
             this.setTicker(ticker, () => {callback(data)});
@@ -177,6 +181,7 @@ class App extends React.Component {
   }
 
   getYesterdayClose(callback) {
+    // Makes a get request specifically for yesterday's close price, and then invokes any provided callback
     axios.get(`/stocks/${this.state.ticker}/yesterdayClose/`)
       .then(({data}) => {callback(data)});
   }
@@ -188,6 +193,7 @@ class App extends React.Component {
     var changeAfterHours = this.state.latestAfterHours - this.state.selectedPrice;
     var changePercentAfterHours = ((this.state.latestAfterHours - this.state.selectedPrice) * 100 / this.state.selectedPrice).toFixed(2);
     
+    // A second line of price change captions should only show for the 1D graph view
     var afterHours = <div></div>;
     if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
       afterHours = <div><Change id='changeAfterHours'>{changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} {'(' + changePercentAfterHours + '%) '}</Change><ChangeCaption id='changeCaptionAfterHours'>After Hours</ChangeCaption></div>;
@@ -210,7 +216,7 @@ class App extends React.Component {
             <InfoButton infoType='platformOwners' value={this.state.platformOwners} text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} width='100px'/>
           </CaptionsRight>
         </Captions>
-        <Chart5y key={this.state.selectedGraph} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
+        <Chart key={this.state.selectedGraph} ticker={this.state.ticker} selectedGraph={this.state.selectedGraph} requestData={this.requestData} getYesterdayClose={this.getYesterdayClose} setSelectedPrice={this.setSelectedPrice} handleMouseLeaveChart={this.handleMouseLeaveChart} setChangeCaption={this.setChangeCaption} setDefaultChangeCaption={this.setDefaultChangeCaption} setRefStartPrice={this.setRefStartPrice} setLatestPrice={this.setLatestPrice} setLatestAfterHours={this.setLatestAfterHours} tooltipY={tooltipY}/>
         <Options onClick={this.handleOptionClick}>
           <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
           <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>

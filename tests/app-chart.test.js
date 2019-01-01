@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { shallow, mount, render } from 'enzyme';
 
 import App from '../client/components/app';
-import Chart5y from '../client/components/chart5y';
+import Chart from '../client/components/chart';
 import { mockRequestData, mockGetYesterdayClose} from './setupTests';
 
 // ===========================================
@@ -22,34 +22,34 @@ import { mockRequestData, mockGetYesterdayClose} from './setupTests';
   var app = mount(<App/>);
   var mockHandleMouseLeaveChart = jest.fn();
 
-  var chart5y = mount(<Chart5y requestData={mockRequestData} handleMouseLeaveChart={mockHandleMouseLeaveChart} setChangeCaption={app.instance().setChangeCaption} setDefaultChangeCaption={app.instance().setDefaultChangeCaption} setLatestPrice={app.instance().setLatestPrice} setSelectedPrice={app.instance().setSelectedPrice} setRefStartPrice={app.instance().setRefStartPrice} setLatestAfterHours={app.instance().setLatestAfterHours} getYesterdayClose={mockGetYesterdayClose}/>);
+  var chart = mount(<Chart requestData={mockRequestData} handleMouseLeaveChart={mockHandleMouseLeaveChart} setChangeCaption={app.instance().setChangeCaption} setDefaultChangeCaption={app.instance().setDefaultChangeCaption} setLatestPrice={app.instance().setLatestPrice} setSelectedPrice={app.instance().setSelectedPrice} setRefStartPrice={app.instance().setRefStartPrice} setLatestAfterHours={app.instance().setLatestAfterHours} getYesterdayClose={mockGetYesterdayClose}/>);
 
   beforeEach(() => {
-    chart5y.unmount();
-    chart5y = mount(<Chart5y requestData={mockRequestData} handleMouseLeaveChart={mockHandleMouseLeaveChart} setChangeCaption={app.instance().setChangeCaption} setDefaultChangeCaption={app.instance().setDefaultChangeCaption} setLatestPrice={app.instance().setLatestPrice} setSelectedPrice={app.instance().setSelectedPrice} setRefStartPrice={app.instance().setRefStartPrice} setLatestAfterHours={app.instance().setLatestAfterHours} getYesterdayClose={mockGetYesterdayClose}/>);
+    chart.unmount();
+    chart = mount(<Chart requestData={mockRequestData} handleMouseLeaveChart={mockHandleMouseLeaveChart} setChangeCaption={app.instance().setChangeCaption} setDefaultChangeCaption={app.instance().setDefaultChangeCaption} setLatestPrice={app.instance().setLatestPrice} setSelectedPrice={app.instance().setSelectedPrice} setRefStartPrice={app.instance().setRefStartPrice} setLatestAfterHours={app.instance().setLatestAfterHours} getYesterdayClose={mockGetYesterdayClose}/>);
   })
 
 // ===========================================
 // TESTS - 5Y, 1Y, 3M and 1M GRAPH VIEWS
 // ===========================================
 
-describe('Chart5y Component for 5Y, 1Y, 3M and 1M Views', () => {
+describe('Chart Component for 5Y, 1Y, 3M and 1M Views', () => {
 
   it('should mount successfully', () => {
-    expect(chart5y.find('#graph').length).toEqual(1);
+    expect(chart.find('#graph').length).toEqual(1);
   });
 
   it('should contain data stored into the graph through loadData', done => {
-    chart5y.setProps({selectedGraph: '1W'});
-    chart5y.instance().apiEndpoint = 'last1wPrices';
-    chart5y.instance().loadData(() => {
-      expect(chart5y.instance().chart.series[0].data.length).not.toEqual(0);
+    chart.setProps({selectedGraph: '1W'});
+    chart.instance().apiEndpoint = 'last1wPrices';
+    chart.instance().loadData(() => {
+      expect(chart.instance().chart.series[0].data.length).not.toEqual(0);
       done();
     });
   });
 
   it('should call handleMouseLeaveChart on mouseLeave event', () => {
-    chart5y.find('#container').simulate('mouseLeave');
+    chart.find('#container').simulate('mouseLeave');
     expect(mockHandleMouseLeaveChart.mock.calls.length).toBe(1);
   });
 
@@ -143,17 +143,17 @@ describe('App Component for 5Y, 1Y, 3M and 1M Views', () => {
 // TESTS - 1W GRAPH VIEWS
 // ===========================================
 
-describe('Chart5y Component for 1W View', () => {
+describe('Chart Component for 1W View', () => {
 
   it('should contain data stored into the graph through loadData', done => {
-    chart5y.setProps({selectedGraph: '1W'});
-    chart5y.instance().apiEndpoint = 'last1wPrices';
-    chart5y.instance().loadData(() => {
-      expect(chart5y.instance().chart.series[0].data.length).not.toEqual(0);
-      expect(chart5y.instance().chart.series[1].data.length).not.toEqual(0);
-      expect(chart5y.instance().chart.series[2].data.length).not.toEqual(0);
-      expect(chart5y.instance().chart.series[3].data.length).not.toEqual(0);
-      expect(chart5y.instance().chart.series[4].data.length).not.toEqual(0);
+    chart.setProps({selectedGraph: '1W'});
+    chart.instance().apiEndpoint = 'last1wPrices';
+    chart.instance().loadData(() => {
+      expect(chart.instance().chart.series[0].data.length).not.toEqual(0);
+      expect(chart.instance().chart.series[1].data.length).not.toEqual(0);
+      expect(chart.instance().chart.series[2].data.length).not.toEqual(0);
+      expect(chart.instance().chart.series[3].data.length).not.toEqual(0);
+      expect(chart.instance().chart.series[4].data.length).not.toEqual(0);
       done();
     });
   });
@@ -179,13 +179,13 @@ describe('App Component for 1W View', () => {
 // TESTS - 1D GRAPH VIEWS
 // ===========================================
 
-describe('Chart5y Component for 1D View', () => {
+describe('Chart Component for 1D View', () => {
 
   it('should contain data stored into the graph through loadData', done => {
-    chart5y.setProps({selectedGraph: '1D'});
-    chart5y.instance().apiEndpoint = 'last1dPrices';
-    chart5y.instance().loadData(() => {
-      expect(chart5y.instance().chart.series[0].data.length).not.toEqual(0);
+    chart.setProps({selectedGraph: '1D'});
+    chart.instance().apiEndpoint = 'last1dPrices';
+    chart.instance().loadData(() => {
+      expect(chart.instance().chart.series[0].data.length).not.toEqual(0);
       done();
     });
   });
