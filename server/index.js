@@ -10,10 +10,16 @@ var stocks = require('../db/stock');
 // SERVE STATIC FILES
 // ===========================================
 
-app.use('/', express.static('./public'));
+var allowCORS = (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+};
+
+app.use('/', allowCORS, express.static('./public'));
 
 // Route any path with pattern /number/ to the public directory as well
-app.use(/\/\d+\//, express.static('./public'));
+app.use(/\/\d+\//, allowCORS, express.static('./public'));
 
 // ============================================
 // ESTABLISH API ENDPOINTS
