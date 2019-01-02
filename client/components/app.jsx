@@ -163,7 +163,13 @@ class App extends React.Component {
         // Select a company from the list with index number equal to the ID in the url
         var idFromURL = window.location.pathname.split('/')[1];
         var company = data[idFromURL-1];
-        if (!company) { console.log('Stock not found for ID ' + idFromURL); }
+        if (idFromURL && !company) { 
+          console.log('Stock not found for ID ' + idFromURL); 
+        }
+        if (!idFromURL) {
+          console.log('No specific stock ID provided. Pulling a random stock.' + idFromURL); 
+          company = data[Math.floor(Math.random() * data.length)];
+        }
         this.setCompanyName(company.name);
         var ticker = company.ticker;
         // Get details for the selected company
