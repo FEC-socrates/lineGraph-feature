@@ -168,10 +168,12 @@ class Chart extends React.Component {
   }
 
   componentDidMount() {
-    var setChangeCaption = this.props.setChangeCaption;
-    var setSelectedPrice = this.props.setSelectedPrice;
-    var selectedGraph = this.props.selectedGraph;
-    var tooltipY = this.props.tooltipY;
+    var {
+      setChangeCaption,
+      setSelectedPrice,
+      selectedGraph,
+      tooltipY
+    } = this.props;
 
     // Render Highcharts
     this.chart = Highcharts.chart('graph', {
