@@ -160,10 +160,12 @@ class App extends React.Component {
     // Get a list of all available stocks
     axios.get('/stocks/')
       .then(({data}) => { 
-        // Select a random company from the list
-        var randomCompany = data[Math.floor(Math.random() * data.length)];
-        this.setCompanyName(randomCompany.name);
-        var ticker = randomCompany.ticker;
+        // Select a company from the list with index number equal to the ID in the url
+        var idFromURL = window.location.pathname.split('/')[1];
+        var company = data[idFromURL-1];
+        if (!company) { console.log('Stock not found for ID ' + idFromURL); }
+        this.setCompanyName(company.name);
+        var ticker = company.ticker;
         // Get details for the selected company
         axios.get(`/stocks/${ticker}`)
           .then(({data}) => {
