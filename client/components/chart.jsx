@@ -299,8 +299,8 @@ class Chart extends React.Component {
 
   render() {
     return (
-      <div id='container' onMouseLeave={() => { this.props.handleMouseLeaveChart(); this.illuminateAllSeries(true);}}>
-        <div id='graph'></div>
+      <div id="container" onMouseLeave={() => { this.props.handleMouseLeaveChart(); this.illuminateAllSeries(true);}}>
+        <div id="graph"></div>
       </div>
     );
   }

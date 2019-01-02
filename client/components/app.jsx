@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Chart from './chart.jsx';
-import InfoButton from './infoButton.jsx'
+import Chart from './Chart.jsx';
+import InfoButton from './InfoButton.jsx'
 import axios from 'axios';
 import Odometer from 'react-odometerjs';
 
@@ -206,11 +206,11 @@ class App extends React.Component {
     if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
       afterHours = 
         <div>
-          <Change id='changeAfterHours'>
+          <Change id="changeAfterHours">
             {changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} 
             {' (' + changePercentAfterHours + '%) '}
           </Change>
-          <ChangeCaption id='changeCaptionAfterHours'>
+          <ChangeCaption id="changeCaptionAfterHours">
             After Hours
           </ChangeCaption>
         </div>;
@@ -221,18 +221,18 @@ class App extends React.Component {
 
     return (
       <AppContainer>
-        <CompanyName id='companyName'>{this.state.companyName}</CompanyName>
+        <CompanyName id="companyName">{this.state.companyName}</CompanyName>
 
-        <div><Odometer id='price' value={odometerPrice} format='(,ddd).ddd' duration={300}></Odometer></div>
+        <div><Odometer id="price" value={odometerPrice} format="(,ddd).ddd" duration={300}></Odometer></div>
 
         <Captions>
           <div>
             <div>
-              <Change id='change'>
+              <Change id="change">
                 {change > 0 ? `+$${Math.abs(change).toFixed(2)}` : `-$${Math.abs(change).toFixed(2)}`} 
                 {' (' + changePercent + '%) '}
               </Change>
-              <ChangeCaption id='changeCaption'>
+              <ChangeCaption id="changeCaption">
                 {this.state.changeCaption}
               </ChangeCaption>
             </div>
@@ -240,13 +240,13 @@ class App extends React.Component {
           </div>
           <CaptionsRight>
             <InfoButton 
-              infoType='analystBuy' 
+              infoType="analystBuy"
               value={this.state.analystBuy + '%'} 
-              text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} width='70px'/>
+              text={this.state.analystBuy + '% of analysts agree that ' + this.state.companyName + ' is a buy.'} width="70px"/>
             <InfoButton 
-              infoType='platformOwners' 
+              infoType="platformOwners"
               value={this.state.platformOwners} 
-              text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} width='100px'/>
+              text={this.state.platformOwners + ' people own ' + this.state.companyName + ' on Robinshood.'} width="100px"/>
           </CaptionsRight>
         </Captions>
 
@@ -266,12 +266,12 @@ class App extends React.Component {
           tooltipY={tooltipY}/>
 
         <Options onClick={this.handleOptionClick}>
-          <Option className='option' selected={this.state.selectedGraph === '1D'}>1D</Option>
-          <Option className='option' selected={this.state.selectedGraph === '1W'}>1W</Option>
-          <Option className='option' selected={this.state.selectedGraph === '1M'}>1M</Option>
-          <Option className='option' selected={this.state.selectedGraph === '3M'}>3M</Option>
-          <Option className='option' selected={this.state.selectedGraph === '1Y'}>1Y</Option>
-          <Option className='option' selected={this.state.selectedGraph === '5Y'}>5Y</Option>
+          <Option className="option" selected={this.state.selectedGraph === '1D'}>1D</Option>
+          <Option className="option" selected={this.state.selectedGraph === '1W'}>1W</Option>
+          <Option className="option" selected={this.state.selectedGraph === '1M'}>1M</Option>
+          <Option className="option" selected={this.state.selectedGraph === '3M'}>3M</Option>
+          <Option className="option" selected={this.state.selectedGraph === '1Y'}>1Y</Option>
+          <Option className="option" selected={this.state.selectedGraph === '5Y'}>5Y</Option>
         </Options>
       </AppContainer>
     );
