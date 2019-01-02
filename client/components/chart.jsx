@@ -1,9 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import Highcharts from 'highcharts';
 import axios from 'axios';
-import { callbackify } from 'util';
 
 class Chart extends React.Component {
   constructor(props) {
