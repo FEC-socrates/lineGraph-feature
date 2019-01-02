@@ -12,6 +12,9 @@ var stocks = require('../db/stock');
 
 app.use('/', express.static('./public'));
 
+// Route any path with pattern /number/ to the public directory as well
+app.use(/\/\d+\//, express.static('./public'));
+
 // ============================================
 // ESTABLISH API ENDPOINTS
 // ============================================
