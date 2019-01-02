@@ -59,7 +59,8 @@ Stock.getInfo = ticker => {
   // Returns a Promise object which resolves to basic info for the stock matching the provided ticker.
   return Stock.findOne(
     {ticker: ticker}, 
-    'ticker name analystBuy platformOwners');
+    'ticker name analystBuy platformOwners'
+  );
 };
 
 Stock.get1dPrices = ticker => {
