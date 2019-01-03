@@ -15,10 +15,12 @@ var allowCORS = (req, res, next) => {
   next();
 };
 
-app.use('/', allowCORS, express.static('./public'));
+app.use(allowCORS);
+
+app.use('/', express.static('./public'));
 
 // Route any path with pattern /number/ to the public directory as well
-app.use(/\/\d+\//, allowCORS, express.static('./public'));
+app.use(/\/\d+\//, express.static('./public'));
 
 // ============================================
 // ESTABLISH API ENDPOINTS
