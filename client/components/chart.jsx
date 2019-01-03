@@ -171,8 +171,7 @@ class Chart extends React.Component {
     var {
       setChangeCaption,
       setSelectedPrice,
-      selectedGraph,
-      tooltipY
+      selectedGraph
     } = this.props;
 
     // Render Highcharts
@@ -262,7 +261,10 @@ class Chart extends React.Component {
           color: '#8c8c8e'
         },
         positioner: (labelWidth, labelHeight, point) => {
-          return {x: point.plotX - 43, y: tooltipY};
+          return {
+            x: point.plotX - 43 + document.getElementById('container').offsetLeft, 
+            y: document.getElementById('container').offsetTop
+          };
         },
         formatter: function() {
           // Set format of tooltip based on the graph type
