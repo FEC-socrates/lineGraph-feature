@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, mount, render } from 'enzyme';
 
-import App from '../client/components/app';
-import Chart from '../client/components/chart';
+import App from '../client/components/App';
+import Chart from '../client/components/Chart';
 import { mockRequestData, mockGetYesterdayClose} from './setupTests';
 
 // ===========================================

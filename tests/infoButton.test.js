@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
-import InfoButton from '../client/components/infoButton';
+import InfoButton from '../client/components/InfoButton';
 
 describe('infoButton Component', () => {
 
