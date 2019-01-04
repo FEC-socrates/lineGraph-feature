@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 // ============================================
 
 // Connect to DB. Use db if exists, else create db.
-mongoose.connect('mongodb://localhost/robinshood_lineGraph');
+mongoose.connect(process.env.MONGODB ? process.env.MONGODB : 'mongodb://localhost/robinshood_lineGraph');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {

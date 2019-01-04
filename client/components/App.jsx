@@ -204,7 +204,7 @@ class App extends React.Component {
     // A second line of price change captions should only show for the 1D graph view
     var afterHours = <div></div>;
     if (this.state.changeCaption === 'Today' && this.state.latestAfterHours) {
-      afterHours = 
+      afterHours = (
         <div>
           <Change id="changeAfterHours">
             {changeAfterHours > 0 ? `+$${Math.abs(changeAfterHours).toFixed(2)}` : `-$${Math.abs(changeAfterHours).toFixed(2)}`} 
@@ -213,7 +213,8 @@ class App extends React.Component {
           <ChangeCaption id="changeCaptionAfterHours">
             After Hours
           </ChangeCaption>
-        </div>;
+        </div> 
+      );
     }
 
     // Workaround for a known bug with Odometer where it does not show decimals if they are 0s.
