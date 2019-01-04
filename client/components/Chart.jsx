@@ -1,7 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
 import Highcharts from 'highcharts';
-import axios from 'axios';
 
 class Chart extends React.Component {
   constructor(props) {

@@ -79,7 +79,6 @@ const Option = styled.div`
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       ticker: null,
       companyName: null,
@@ -158,7 +157,7 @@ class App extends React.Component {
   // Makes a get request to the provided path for a randomly generated stock, and then invokes any provided callback
 
     // Get a list of all available stocks
-    axios.get('http://localhost:3456/stocks/')
+    axios.get(process.env.NOTLOCAL ? '/stocks/' : 'http://localhost:3456/stocks/')
       .then(({data}) => { 
         // Select a company from the list with index number equal to the ID in the url
         var idFromURL = window.location.pathname.split('/')[1];
@@ -173,7 +172,7 @@ class App extends React.Component {
         this.setCompanyName(company.name);
         var ticker = company.ticker;
         // Get details for the selected company
-        axios.get(`http://localhost:3456/stocks/${ticker}`)
+        axios.get(process.env.NOTLOCAL ? `/stocks/${ticker}` : `http://localhost:3456/stocks/${ticker}`)
           .then(({data}) => {
             this.setState({
               analystBuy: (data.analystBuy*100).toFixed(0),
@@ -181,7 +180,7 @@ class App extends React.Component {
             });
           });
         // Get price history for the selected company
-        axios.get(`http://localhost:3456/stocks/${ticker}/${path}`)
+        axios.get(process.env.NOTLOCAL ? `/stocks/${ticker}/${path}` : `http://localhost:3456/stocks/${ticker}/${path}`)
           .then(({data}) => { 
             this.setTicker(ticker, () => {callback(data)});
           });
@@ -190,7 +189,7 @@ class App extends React.Component {
 
   getYesterdayClose(callback) {
   // Makes a get request specifically for yesterday's close price, and then invokes any provided callback
-    axios.get(`http://localhost:3456/stocks/${this.state.ticker}/yesterdayClose/`)
+    axios.get(process.env.NOTLOCAL ? `/stocks/${this.state.ticker}/yesterdayClose/` : `http://localhost:3456/stocks/${this.state.ticker}/yesterdayClose/`)
       .then(({data}) => {callback(data)});
   }
 
