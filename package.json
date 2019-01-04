@@ -46,6 +46,6 @@
     "eslint": "^5.10.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "jest": "^23.6.0",
-    "regenerator-runtime": "^0.13.1",
+    "regenerator-runtime": "^0.13.1"
   }
 }
