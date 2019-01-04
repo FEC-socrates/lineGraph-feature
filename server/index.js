@@ -88,4 +88,4 @@ app.get('/stocks/:ticker/last5yPrices', (req, res) => {
 // START THE SERVER
 // ============================================
 
-app.listen(port, () => console.log('server is listening!', 'process.env.MONGODB --->', process.env.MONGODB));
+app.listen(port, () => console.log('server is listening on port ' + port));

@@ -12,6 +12,7 @@
     "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTests.js"
   },
   "scripts": {
+    "prestart": "webpack",
     "start": "nodemon server/index.js",
     "seed": "node db/seed.js",
     "configDB": "node db/config.js",
