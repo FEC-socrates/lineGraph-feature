@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = 3456;
+const port = process.env.PORT || 3456;
 var stocks = require('../db/stock');
 
 
@@ -88,5 +88,4 @@ app.get('/stocks/:ticker/last5yPrices', (req, res) => {
 // START THE SERVER
 // ============================================
 
-console.log('process.env.MONGODB --->', process.env.MONGODB);
-app.listen(port, () => console.log('server is listening!'));
+app.listen(port, () => console.log('server is listening!', 'process.env.MONGODB --->', process.env.MONGODB));
