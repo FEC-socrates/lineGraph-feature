@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Robinshood lineGraph Module</title>
-	<link href='/styles.css' rel='stylesheet'>
-	<link href='/odometer-theme-default.css' rel='stylesheet'>
+
+	<!-- Dynamically load stylesheets depending on whether app is run locally or not -->
+	<script>
+		var localStylesheets;
+		var publicStylesheets = ['http://d19drlh3b7ouuu.cloudfront.net/styles.css', 'http://d19drlh3b7ouuu.cloudfront.net/odometer-theme-default.css'];
+		// If localStylesheets are defined, app will localStylesheets, else it will use publicStylesheets
+		// localStylesheets = ['/styles.css', '/odometer-theme-default.css'];
+		var stylesheets = localStylesheets ? localStylesheets : publicStylesheets;
+		stylesheets.forEach(sheet => {
+			var link = document.createElement("link");
+			link.type = 'text/css';
+			link.rel = 'stylesheet';
+			link.href = sheet;
+			document.head.appendChild(link);
+		});
+	</script>
 </head>
+
 <body>
 	<div id='lineGraph'>Not yet rendered.</div>
-	<script src='/bundle.js'></script>
+
+	<!-- Dynamically load JS files depending on whether app is run locally or not -->
+	<script>
+		var localScripts;
+		var publicScripts = ['http://d19drlh3b7ouuu.cloudfront.net/bundle.js'];
+		// If localScripts are defined, app will localScripts, else it will use publicScripts
+		// localScripts = ['/bundle.js'];
+		var scripts = localScripts ? localScripts : publicScripts;
+		scripts.forEach(script => {
+			var s = document.createElement("script");
+			s.type = 'text/javascript';
+			s.src = script;
+			document.body.appendChild(s);
+		});
+	</script>
+
 </body>
+
 </html>
