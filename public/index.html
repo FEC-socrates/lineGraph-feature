@@ -29,7 +29,7 @@
 		var localScripts;
 		var publicScripts = ['https://s3-us-west-1.amazonaws.com/robinshood-linegraph/bundle.js'];
 		// If localScripts are defined, app will localScripts, else it will use publicScripts
-		// localScripts = ['/bundle.js'];
+		localScripts = ['/bundle.js'];
 		var scripts = localScripts ? localScripts : publicScripts;
 		scripts.forEach(script => {
 			var s = document.createElement("script");
