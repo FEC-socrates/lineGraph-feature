@@ -1,11 +1,12 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const expressStaticGzip = require("express-static-gzip");
 const port = process.env.PORT || 3456;
 var stocks = require('../db/stock');
 
 
-// ============================================
+// ===========================================
 // SERVE STATIC FILES
 // ===========================================
 
@@ -15,12 +16,17 @@ var allowCORS = (req, res, next) => {
   next();
 };
 
+var expressStaticGzipOptions = {
+  enableBrotli: true,
+  orderPreference: ['br']
+};
+
 app.use(allowCORS);
 
-app.use('/', express.static('./public'));
+app.use('/', expressStaticGzip('./public', expressStaticGzipOptions));
 
 // Route any path with pattern /number/ to the public directory as well
-app.use(/\/\d+\//, express.static('./public'));
+app.use(/\/\d+\//, expressStaticGzip('./public', expressStaticGzipOptions));
 
 // ============================================
 // ESTABLISH API ENDPOINTS

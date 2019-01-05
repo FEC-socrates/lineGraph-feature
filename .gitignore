@@ -28,7 +28,7 @@ dist/
 pushConfig.sh
 
 # Webpack Bundle
-bundle.js
+bundle.js*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
