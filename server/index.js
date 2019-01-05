@@ -7,7 +7,7 @@ var stocks = require('../db/stock');
 
 
 // ===========================================
-// SERVE STATIC FILES
+// ALLOW CORS
 // ===========================================
 
 var allowCORS = (req, res, next) => {
@@ -16,20 +16,11 @@ var allowCORS = (req, res, next) => {
   next();
 };
 
-var expressStaticGzipOptions = {
-  enableBrotli: true,
-  orderPreference: ['br']
-};
-
 app.use(allowCORS);
 
-app.use('/', expressStaticGzip('./public', expressStaticGzipOptions));
-
-// Route any path with pattern /number/ to the public directory as well
-app.use(/\/\d+\//, expressStaticGzip('./public', expressStaticGzipOptions));
 
 // ============================================
-// ESTABLISH API ENDPOINTS
+// HANDLE API ENDPOINTS
 // ============================================
 
 // GET /stocks returns a list of all stocks
@@ -88,6 +79,20 @@ app.get('/stocks/:ticker/last5yPrices', (req, res) => {
   stocks.get5yPrices(req.params.ticker)
     .then(results => { res.send(JSON.stringify(results)); });
 });
+
+// ===========================================
+// IF NOT API ENDPOINTS, SERVE STATIC FILES
+// ===========================================
+
+var expressStaticGzipOptions = {
+  enableBrotli: true,
+  orderPreference: ['br']
+};
+
+app.use('/', expressStaticGzip('./public', expressStaticGzipOptions));
+
+// Route any path with pattern /number/ to the public directory as well
+app.use(/\/\d+\//, expressStaticGzip('./public', expressStaticGzipOptions));
 
 
 // ============================================
