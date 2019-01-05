@@ -84,15 +84,20 @@ app.get('/stocks/:ticker/last5yPrices', (req, res) => {
 // IF NOT API ENDPOINTS, SERVE STATIC FILES
 // ===========================================
 
+var logAcceptEncoding = (req, res, next) => {
+  console.log('Requst accept-encoding: --->', req.get('accept-encoding'));
+  next();
+}
+
 var expressStaticGzipOptions = {
   enableBrotli: true,
   orderPreference: ['br']
 };
 
-app.use('/', expressStaticGzip('./public', expressStaticGzipOptions));
+app.use('/', logAcceptEncoding, expressStaticGzip('./public', expressStaticGzipOptions));
 
 // Route any path with pattern /number/ to the public directory as well
-app.use(/\/\d+\//, expressStaticGzip('./public', expressStaticGzipOptions));
+app.use(/\/\d+\//, logAcceptEncoding, expressStaticGzip('./public', expressStaticGzipOptions));
 
 
 // ============================================
