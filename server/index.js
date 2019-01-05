@@ -94,10 +94,10 @@ var expressStaticGzipOptions = {
   orderPreference: ['br']
 };
 
-app.use('/', logAcceptEncoding, expressStaticGzip('./public', expressStaticGzipOptions));
-
-// Route any path with pattern /number/ to the public directory as well
+// Route any path with pattern /number/ to the public directory
 app.use(/\/\d+\//, logAcceptEncoding, expressStaticGzip('./public', expressStaticGzipOptions));
+// Else handle root requests
+app.use('/', logAcceptEncoding, expressStaticGzip('./public', expressStaticGzipOptions));
 
 
 // ============================================
